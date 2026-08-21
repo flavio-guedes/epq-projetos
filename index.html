@@ -3,100 +3,136 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Projetos — Painel</title>
+<title>Projetos — Painel HTML Publicado</title>
 <style>
+  :root {
+    --bg:#0b1220;
+    --panel:#0f172a;
+    --panel-2:#111b2d;
+    --line:#1f2d42;
+    --text:#e6e9ef;
+    --muted:#8a93a6;
+    --blue:#3b82f6;
+    --green:#10b981;
+    --amber:#f59e0b;
+    --red:#ef4444;
+    --purple:#7c3aed;
+    --radius:14px;
+  }
   * { box-sizing: border-box; }
-  body { font-family: Arial, sans-serif; margin: 0; background: #f5f5f5; color: #222; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    font-family: ui-sans-serif, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial;
+    background: radial-gradient(1200px 800px at 20% -10%, rgba(59,130,246,.18), transparent),
+                radial-gradient(1000px 700px at 80% 10%, rgba(124,58,237,.15), transparent),
+                var(--bg);
+    color: var(--text);
+  }
   .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
-  h1 { font-size: 22px; margin-bottom: 16px; }
-  .board { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
-  .column { background: #ffffff; border-radius: 10px; padding: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
-  .column h2 { font-size: 16px; margin: 0 0 10px; }
-  .status-andamento { border-top: 4px solid #3b82f6; }
-  .status-concluido { border-top: 4px solid #10b981; }
-  .status-bloqueado { border-top: 4px solid #ef4444; }
-  .status-planejamento { border-top: 4px solid #f59e0b; }
-  .card { background: #fafafa; border: 1px solid #e5e7eb; border-radius: 8px; padding: 10px; margin-bottom: 10px; }
-  .card-title { font-weight: 700; font-size: 14px; }
-  .card-meta { font-size: 12px; color: #555; margin-top: 6px; }
-  .badge { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px; background: #e5e7eb; color: #222; margin-top: 6px; }
-  .actions { margin-top: 8px; display: flex; gap: 8px; }
-  .actions button { border: 0; padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 12px; background: #111; color: #fff; }
-  .github { background: #24292e; }
-  .link { background: #0a66c2; }
-  .form { margin-top: 10px; display: grid; gap: 8px; }
-  .form input, .form select, .form textarea { padding: 8px; border-radius: 6px; border: 1px solid #d1d5db; font-size: 13px; }
+  header {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    padding: 18px 18px 14px; border-bottom: 1px solid var(--line);
+    background: linear-gradient(180deg, rgba(15,23,42,.7), rgba(15,23,42,.4));
+    backdrop-filter: blur(10px);
+    position: sticky; top: 0; z-index: 50;
+  }
+  header h1 { font-size: 18px; margin: 0; letter-spacing: .2px; }
+  header p { margin: 6px 0 0; color: var(--muted); font-size: 13px; }
+  .board {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 18px;
+    margin-top: 22px;
+  }
+  .card {
+    background: linear-gradient(180deg, rgba(15,23,42,.85), rgba(17,27,45,.75));
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 16px;
+    transition: transform .08s ease, border-color .2s ease, box-shadow .2s ease;
+    box-shadow: 0 10px 30px rgba(0,0,0,.18);
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .card:hover { transform: translateY(-2px); border-color: #2a3a55; box-shadow: 0 14px 36px rgba(0,0,0,.25); }
+  .card-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .card-title { font-weight: 700; font-size: 15px; }
+  .badge { display: inline-flex; align-items: center; gap: 8px; padding: 5px 10px; border-radius: 999px; font-size: 12px; background: rgba(59,130,246,.12); color: #cfe3ff; border: 1px solid rgba(59,130,246,.25); }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 10px rgba(16,185,129,.7); }
+  .desc { color: var(--muted); font-size: 13px; line-height: 1.45; }
+  .links { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 2px; }
+  .link {
+    display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 10px; font-size: 13px; font-weight: 600; text-decoration: none; border: 1px solid transparent;
+  }
+  .link.primary { background: rgba(59,130,246,.14); color: #e8f1ff; border-color: rgba(59,130,246,.35); }
+  .link.primary:hover { background: rgba(59,130,246,.25); }
+  .link.secondary { background: rgba(148,163,184,.08); color: #e6e9ef; border-color: rgba(148,163,184,.18); }
+  .link.secondary:hover { background: rgba(148,163,184,.14); }
 </style>
 </head>
 <body>
   <div class="container">
-    <h1>Projetos EPQ — Pipeline</h1>
-    <div class="board">
-      <div class="column status-andamento">
-        <h2>Em andamento</h2>
-        <div class="card">
-          <div class="card-title">CRM de Prospecção</div>
-          <div class="card-meta">HTML standalone com pesquisa, backlog, tarefas e follow-ups.</div>
-          <div class="badge">Aguardando deploy</div>
-          <div class="actions">
-            <button class="github" onclick="alert('Abrir repositório')">Repo</button>
-            <button class="link" onclick="alert('Abrir preview')">Preview</button>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-title">Gestão Pedagógica</div>
-          <div class="card-meta">Sistema de turnos, alunos, professores, salas e disponibilidades.</div>
-          <div class="badge">Aguardando deploy</div>
-          <div class="actions">
-            <button class="github" onclick="alert('Abrir repositório')">Repo</button>
-            <button class="link" onclick="alert('Abrir preview')">Preview</button>
-          </div>
-        </div>
+    <header>
+      <div>
+        <h1>Projetos EPQ</h1>
+        <p>Visão unificada dos projetos publicados em HTML.</p>
       </div>
-      <div class="column status-concluido">
-        <h2>Concluído</h2>
-        <div class="card">
-          <div class="card-title">Playbook de Atendimento v6</div>
-          <div class="card-meta">Atualizado com gestão pedagógica, termos militares e cursos.</div>
-          <div class="badge">Publicado</div>
-          <div class="actions">
-            <button class="github" onclick="window.open('https://github.com/flavio-guedes/epq','_blank')">Repo</button>
-            <button class="link" onclick="window.open('https://flavio-guedes.github.io/epq/playbookatendimento.html','_blank')">Preview</button>
-          </div>
-        </div>
-      </div>
-      <div class="column status-bloqueado">
-        <h2>Bloqueado</h2>
-        <div class="card">
-          <div class="card-title">Meta Ads</div>
-          <div class="card-meta">Conta acessível, campanhas com erro de pagamento.</div>
-          <div class="badge">Pagamento</div>
-          <div class="actions">
-            <button class="link" onclick="window.open('https://adsmanager.facebook.com/adsmanager/manage/campaigns?act=298968926901604','_blank')">Abrir Ads</button>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-title">ClickUp / API Status</div>
-          <div class="card-meta">Falta workspace/daemon local.</div>
-          <div class="badge">Infra</div>
-        </div>
-      </div>
-      <div class="column status-planejamento">
-        <h2>Planejamento</h2>
-        <form class="form" onsubmit="event.preventDefault(); alert('Salvar: ' + JSON.stringify({nome: this.nome.value, status: this.status.value, link: this.link.value})); this.reset();">
-          <input name="nome" placeholder="Nome do projeto" required />
-          <select name="status">
-            <option value="andamento">Em andamento</option>
-            <option value="concluido">Concluído</option>
-            <option value="bloqueado">Bloqueado</option>
-            <option value="planejamento">Planejamento</option>
-          </select>
-          <input name="link" placeholder="Link do repositório/preview" />
-          <textarea name="nota" rows="3" placeholder="Nota"></textarea>
-          <button type="submit">Adicionar</button>
-        </form>
-      </div>
-    </div>
+      <div class="badge"><span class="dot"></span> Publicado</div>
+    </header>
+
+    <div class="board" id="board"></div>
   </div>
+
+  <script>
+    const projetos = [
+      {
+        nome: "Central EPQ",
+        descricao: "Hub dos painéis EPQ em estilo Dark Futuristic.",
+        link: "https://flavio-guedes.github.io/epq-central/"
+      },
+      {
+        nome: "Painel Pedagógico",
+        descricao: "Gestão pedagógica: turnos, turmas, professores e salas.",
+        link: "https://flavio-guedes.github.io/pedagogico/"
+      },
+      {
+        nome: "Fluxo Comercial",
+        descricao: "Pipeline comercial com métricas, funil e follow-up.",
+        link: "https://flavio-guedes.github.io/epq/fluxocomercial.html"
+      },
+      {
+        nome: "Playbook de Atendimento",
+        descricao: "Playbook com scripts, etapas e destaque PMERJ.",
+        link: "https://flavio-guedes.github.io/epq/playbookatendimento.html"
+      },
+      {
+        nome: "Página do Aulão",
+        descricao: "Campanha do aulão: Direito Penal e Administrativo.",
+        link: "https://flavio-guedes.github.io/epq/planodivulgacao-aulao.html"
+      },
+      {
+        nome: "B2B Opportunity Finder",
+        descricao: "Prospecção B2B com busca, base e exportação CSV.",
+        link: "https://flavio-guedes.github.io/b2b-opportunity-finder/"
+      }
+    ];
+
+    const board = document.getElementById('board');
+    projetos.forEach(p => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <div class="card-top">
+          <div class="card-title">${p.nome}</div>
+          <div class="badge"><span class="dot"></span> Publicado</div>
+        </div>
+        <div class="desc">${p.descricao}</div>
+        <div class="links">
+          <a class="link primary" href="${p.link}" target="_blank" rel="noopener">Abrir painel</a>
+        </div>
+      `;
+      board.appendChild(card);
+    });
+  </script>
 </body>
 </html>
