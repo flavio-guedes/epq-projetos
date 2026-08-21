@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Commander — Meta Ads EPQ</title>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: Arial, sans-serif; margin: 0; background: #f3f4f6; color: #111827; }
+  .container { max-width: 1100px; margin: 0 auto; padding: 24px; }
+  h1 { font-size: 20px; margin: 0 0 6px; }
+  .subtitle { color: #6b7280; font-size: 13px; margin-bottom: 18px; }
+  .grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+  @media (min-width: 860px) {
+    .grid { grid-template-columns: 260px 1fr; }
+  }
+  .panel { background: #ffffff; border-radius: 12px; padding: 16px; box-shadow: 0 1px 6px rgba(0,0,0,0.06); }
+  .panel h2 { font-size: 14px; margin: 0 0 10px; text-transform: uppercase; letter-spacing: 0.08em; color: #374151; }
+  .kpi { display: flex; flex-direction: column; gap: 6px; }
+  .kpi .item { display: flex; justify-content: space-between; align-items: center; font-size: 13px; padding: 8px 10px; background: #fafafa; border: 1px solid #e5e7eb; border-radius: 8px; }
+  .kpi .item .label { color: #6b7280; }
+  .kpi .item .value { font-weight: 700; }
+  .insights { display: flex; flex-direction: column; gap: 10px; }
+  .insight { padding: 12px; border-radius: 10px; background: #fff7ed; border-left: 4px solid #f59e0b; }
+  .insight.critical { background: #fef2f2; border-left-color: #ef4444; }
+  .insight.success { background: #eff6ff; border-left-color: #2563eb; }
+  .insight h3 { font-size: 13px; margin: 0 0 6px; }
+  .insight p { font-size: 13px; color: #374151; margin: 0; line-height: 1.4; }
+  .tasklist { display: flex; flex-direction: column; gap: 8px; margin-top: 6px; }
+  .task { display: flex; align-items: flex-start; gap: 10px; padding: 10px; background: #fafafa; border: 1px solid #e5e7eb; border-radius: 10px; }
+  .task input[type="checkbox"] { width: 18px; height: 18px; margin-top: 2px; }
+  .task-body { flex: 1; }
+  .task-title { font-size: 13px; font-weight: 700; }
+  .task-desc { font-size: 12px; color: #6b7280; margin-top: 2px; }
+  .actions-row { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+  .actions-row button { border: 0; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 12px; background: #111827; color: #fff; }
+  .actions-row button.secondary { background: #e5e7eb; color: #111827; }
+  .actions-row button.ghost { background: #ffffff; color: #111827; border: 1px solid #d1d5db; }
+  .history { font-size: 12px; color: #6b7280; margin-top: 6px; }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>Commander — Meta Ads EPQ</h1>
+    <div class="subtitle">Diagnóstico operacional + tarefas sugeridas baseadas na sessão atual.</div>
+
+    <div class="grid">
+      <div class="panel">
+        <h2>Contexto rápido</h2>
+        <div class="kpi">
+          <div class="item"><span class="label">Status</span><span class="value">Pendente</span></div>
+          <div class="item"><span class="label">Conta EPQ principal</span><span class="value">2733798906817357</span></div>
+          <div class="item"><span class="label">Fonte atual</span><span class="value">Ads Manager browser</span></div>
+          <div class="item"><span class="label">Período</span><span class="value">Últimos 30 dias</span></div>
+        </div>
+        <div class="actions-row" style="margin-top: 14px;">
+          <button onclick="window.open('https://adsmanager.facebook.com/adsmanager/manage/campaigns?act=2733798906817357','_blank')">Abrir Ads Manager</button>
+          <button class="secondary" onclick="alert('Em breve: importar CSV/API.')">Importar dados</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>Insights</h2>
+        <div class="insights">
+          <div class="insight critical">
+            <h3>Conta sem desempenho visível no período atual</h3>
+            <p>Conta 206741204958388 está com R$ 0,00 gasto nos últimos 30 dias na visão atual. É necessário confirmar se a conta correta é 2733798906817357 e se existem anúncios ativos.</p>
+          </div>
+          <div class="insight">
+            <h3>Filtro “Anúncios ativos” não confirmou retorno</h3>
+            <p>O clique no filtro não mudou a tabela. Isso pode indicar carregamento, bloqueio da UI ou ausência de ativos na conta aberta.</p>
+          </div>
+          <div class="insight">
+            <h3>Há itens pendentes e rascunhos</h3>
+            <p>Pelo menos 1 rascunho identificado: “Conversão Leads - Paizim Barbeshop - 17 - MAR”. Também há “Conferir e publicar (17)”.</p>
+          </div>
+          <div class="insight success">
+            <h3>Diagnóstico parcial concluído</h3>
+            <p>Já temos indício de baixa/nenhuma atividade recente e estrutura de campanhas desatualizada. A próxima etapa é acessar a conta alvo com confirmação explícita.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top: 16px;">
+      <h2>Tarefas sugeridas</h2>
+      <div class="tasklist" id="tasklist">
+        <label class="task"><input type="checkbox" data-task="confirm-account"><div class="task-body"><div class="task-title">Confirmar conta ativa</div><div class="task-desc">Acessar Ads Manager pela conta 2733798906817357 e validar se há campanhas ativas no período.</div></div></label>
+        <label class="task"><input type="checkbox" data-task="filter-active"><div class="task-body"><div class="task-title">Filtrar por anúncios ativos</div><div class="task-desc">Aplicar o filtro “Anúncios ativos” e registrar retorno.</div></div></label>
+        <label class="task"><input type="checkbox" data-task="review-campaigns"><div class="task-body"><div class="task-title">Revisar campanhas desativadas</div><div class="task-desc">Listar campanhas desativadas/inativas e definir se são arquivo, repetição ou erro.</div></div></label>
+        <label class="task"><input type="checkbox" data-task="publish-drafts"><div class="task-body"><div class="task-title">Publicar rascunhos pendentes</div><div class="task-desc">Avaliar “Conferir e publicar (17)” e rascunho do Paizim Barbeshop; só publicar com aprovação.</div></div></label>
+        <label class="task"><input type="checkbox" data-task="budget-audit"><div class="task-body"><div class="task-title">Auditar orçamento e objetivo</div><div class="task-desc">Confirmar objetivos por campanha e orçamentos diário/total compatíveis com o funil atual.</div></div></label>
+        <label class="task"><input type="checkbox" data-task="tracking-check"><div class="task-body"><div class="task-title">Validar eventos e tracking</div><div class="task-desc">Checar eventos de conversão, Pixel/CAPI e domínios; evitar otimização sem medição.</div></div></label>
+      </div>
+      <div class="actions-row">
+        <button onclick="document.querySelectorAll('#tasklist input[type=checkbox]:checked').forEach(i=>i.checked=false)">Limpar seleção</button>
+        <button class="secondary" onclick="alert('Em breve: exportar checklist para CSV.')">Exportar checklist</button>
+      </div>
+      <div class="history" id="history">Ações realizadas: nenhuma.</div>
+    </div>
+  </div>
+</body>
+</html>
