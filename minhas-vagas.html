@@ -60,6 +60,19 @@
   }
   .link.primary { background: rgba(59,130,246,.14); color: #e8f1ff; border-color: rgba(59,130,246,.35); }
   .link.primary:hover { background: rgba(59,130,246,.25); }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; border: 0;
+  }
+  .btn.primary { background: linear-gradient(90deg, var(--blue), var(--purple)); color: #fff; }
+  .btn.secondary { background: rgba(15,23,42,.6); color: var(--text); border: 1px solid var(--line); }
+  .email-box {
+    margin-top: 12px; padding: 12px; border-radius: 10px; background: rgba(15,23,42,.6); border: 1px solid var(--line); color: var(--muted); font-size: 12px; line-height: 1.5; display: none;
+  }
+  .email-box.visible { display: block; }
+  .toast {
+    position: fixed; bottom: 20px; right: 20px; padding: 10px 14px; border-radius: 10px; background: var(--green); color: #fff; font-size: 13px; font-weight: 700; opacity: 0; transform: translateY(10px); transition: opacity .2s ease, transform .2s ease;
+  }
+  .toast.visible { opacity: 1; transform: translateY(0); }
 </style>
 </head>
 <body>
@@ -67,15 +80,19 @@
     <header>
       <div>
         <h1>Projetos · Minhas Vagas</h1>
-        <p>Aplicações e currículos pessoais.</p>
+        <p>Veja a vaga, gere o e-mail e aplique.</p>
       </div>
-    </div>
+      <div>
+        <button class="btn secondary" id="btn-upload" type="button">📸 Enviar print</button>
+        <input type="file" id="file-upload" accept="image/*" capture="environment" style="display:none">
+      </div>
+    </header>
 
     <div class="section">
       <h2>Currículos</h2>
       <div class="card">
         <p>Pasta: <a href="https://drive.google.com/drive/folders/1ZdEzPlrFE6MBFXmK22brD9DzIVq19UU5?usp=drive_link" target="_blank" rel="noopener" style="color:var(--blue)">Abrir pasta no Drive</a></p>
-        <p style="color:var(--muted);font-size:13px;margin-top:8px;">Baixe o currículo desejado antes de aplicar.</p>
+        <p style="color:var(--muted);font-size:13px;margin-top:8px;">Baixe o currículo antes de aplicar.</p>
       </div>
     </div>
 
@@ -83,78 +100,86 @@
       <h2>Vagas</h2>
       <div class="tbl-wrap">
         <table>
-          <tr><th>Vaga</th><th>Tipo</th><th>Aplicação</th><th>Status</th></tr>
+          <tr><th>Vaga</th><th>Tipo</th><th>Aplicação</th><th>Status</th><th>Ação</th></tr>
           <tr>
             <td>Junior Java Developer</td>
             <td>Remoto</td>
             <td><a href="https://www.linkedin.com/jobs/view/12345" target="_blank" rel="noopener" style="color:var(--blue)">Aplicar</a></td>
             <td>Pendente</td>
+            <td><button class="btn primary" onclick="generateEmail(this, 'Junior Java Developer', 'Remoto')">Gerar e-mail</button></td>
           </tr>
           <tr>
             <td>Pleno Automated Test Analyst</td>
             <td>Remoto</td>
             <td><a href="https://www.linkedin.com/jobs/view/12346" target="_blank" rel="noopener" style="color:var(--blue)">Aplicar</a></td>
             <td>Pendente</td>
+            <td><button class="btn primary" onclick="generateEmail(this, 'Pleno Automated Test Analyst', 'Remoto')">Gerar e-mail</button></td>
           </tr>
           <tr>
             <td>Junior Designer</td>
             <td>Remoto</td>
             <td><a href="https://www.linkedin.com/jobs/view/12347" target="_blank" rel="noopener" style="color:var(--blue)">Aplicar</a></td>
             <td>Pendente</td>
+            <td><button class="btn primary" onclick="generateEmail(this, 'Junior Designer', 'Remoto')">Gerar e-mail</button></td>
           </tr>
           <tr>
             <td>Junior Systems Analyst</td>
             <td>Remoto</td>
             <td><a href="https://www.linkedin.com/jobs/view/12348" target="_blank" rel="noopener" style="color:var(--blue)">Aplicar</a></td>
             <td>Pendente</td>
+            <td><button class="btn primary" onclick="generateEmail(this, 'Junior Systems Analyst', 'Remoto')">Gerar e-mail</button></td>
           </tr>
           <tr>
             <td>Pleno Business Analyst</td>
             <td>Remoto</td>
             <td><a href="https://www.linkedin.com/jobs/view/12349" target="_blank" rel="noopener" style="color:var(--blue)">Aplicar</a></td>
             <td>Pendente</td>
+            <td><button class="btn primary" onclick="generateEmail(this, 'Pleno Business Analyst', 'Remoto')">Gerar e-mail</button></td>
           </tr>
           <tr>
             <td>Senior Traffic Manager</td>
             <td>Remoto</td>
             <td><a href="https://www.linkedin.com/jobs/view/12350" target="_blank" rel="noopener" style="color:var(--blue)">Aplicar</a></td>
             <td>Pendente</td>
+            <td><button class="btn primary" onclick="generateEmail(this, 'Senior Traffic Manager', 'Remoto')">Gerar e-mail</button></td>
           </tr>
           <tr>
             <td>Software Architect</td>
             <td>Remoto</td>
             <td><a href="https://www.linkedin.com/jobs/view/12351" target="_blank" rel="noopener" style="color:var(--blue)">Aplicar</a></td>
             <td>Pendente</td>
+            <td><button class="btn primary" onclick="generateEmail(this, 'Software Architect', 'Remoto')">Gerar e-mail</button></td>
           </tr>
           <tr>
             <td>Dev/Ops/SRE Engineer</td>
             <td>Remoto</td>
             <td><a href="https://www.linkedin.com/jobs/view/12352" target="_blank" rel="noopener" style="color:var(--blue)">Aplicar</a></td>
             <td>Pendente</td>
+            <td><button class="btn primary" onclick="generateEmail(this, 'Dev/Ops/SRE Engineer', 'Remoto')">Gerar e-mail</button></td>
           </tr>
           <tr>
             <td>Data & AI Engineer</td>
             <td>Remoto</td>
             <td><a href="https://www.linkedin.com/jobs/view/12353" target="_blank" rel="noopener" style="color:var(--blue)">Aplicar</a></td>
             <td>Pendente</td>
+            <td><button class="btn primary" onclick="generateEmail(this, 'Data & AI Engineer', 'Remoto')">Gerar e-mail</button></td>
           </tr>
           <tr>
             <td>Administrative Data Intern</td>
             <td>Remoto</td>
             <td><a href="https://www.linkedin.com/jobs/view/12354" target="_blank" rel="noopener" style="color:var(--blue)">Aplicar</a></td>
             <td>Pendente</td>
+            <td><button class="btn primary" onclick="generateEmail(this, 'Administrative Data Intern', 'Remoto')">Gerar e-mail</button></td>
           </tr>
         </table>
       </div>
     </div>
 
     <div class="section">
-      <h2>Como aplicar</h2>
+      <h2>E-mail gerado</h2>
       <div class="card">
-        <p>1. Abra a vaga.</p>
-        <p>2. Baixe o currículo da pasta do Drive.</p>
-        <p>3. Anexe no LinkedIn e envie.</p>
-        <p>4. Aqui você pode marcar o status depois.</p>
+        <p style="color:var(--muted);font-size:13px;">Clique em <strong>Gerar e-mail</strong> na vaga desejada. O texto aparece abaixo e você pode copiar.</p>
+        <div class="email-box" id="email-box"></div>
       </div>
     </div>
 
@@ -162,5 +187,50 @@
       <a class="link primary" href="https://github.com/flavio-guedes/epq-projetos" target="_blank" rel="noopener">Abrir repositório</a>
     </div>
   </div>
+
+  <div class="toast" id="toast">E-mail copiado</div>
+
+  <script>
+    function generateEmail(btn, role, type){
+      const assunto = `Candidatura à vaga de ${role}`;
+      const corpo = `Olá, recrutador(a)!
+
+Me chamo Flávio e me candidatei à vaga de ${role} (${type}).
+
+Tenho experiência prática em projetos de produto, performance, conteúdo e integração de ferramentas, com entrega orientada a resultado e agilidade.
+
+Segue abaixo meu currículo e estou à disposição para qualquer informação adicional.
+
+Aguardo o retorno.
+Obrigado!`;
+
+      const box = document.getElementById('email-box');
+      box.innerHTML = `<strong>Para:</strong> recrutamento@empresa.com<br><strong>Assunto:</strong> ${assunto}<br><br><strong>Mensagem:</strong><br>${corpo.replace(/\n/g, '<br>')}<br><br><button class="btn primary" onclick="copyEmail()">Copiar e-mail</button>`;
+      box.classList.add('visible');
+    }
+    function copyEmail(){
+      const box = document.getElementById('email-box');
+      const text = box.innerText;
+      navigator.clipboard.writeText(text).then(()=>{
+        const toast = document.getElementById('toast');
+        toast.classList.add('visible');
+        setTimeout(()=>toast.classList.remove('visible'), 2000);
+      });
+    }
+    document.getElementById('btn-upload').addEventListener('click', ()=>{
+      document.getElementById('file-upload').click();
+    });
+    document.getElementById('file-upload').addEventListener('change', (e)=>{
+      const file = e.target.files[0];
+      if(!file) return;
+      const reader = new FileReader();
+      reader.onload = ()=>{
+        const box = document.getElementById('email-box');
+        box.innerHTML = `<strong>Print enviado:</strong><br><img src="${reader.result}" style="max-width:100%;border-radius:10px;margin-top:8px;"><br><button class="btn primary" onclick="copyEmail()">Copiar e-mail</button>`;
+        box.classList.add('visible');
+      };
+      reader.readAsDataURL(file);
+    });
+  </script>
 </body>
 </html>
