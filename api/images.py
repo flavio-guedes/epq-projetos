@@ -5,6 +5,12 @@ from PIL import Image
 ROOT = Path("/Users/mac/epq-next/epq-projetos/assets/images")
 OUT = Path("/Users/mac/epq-next/epq-projetos/images/index.json")
 
+_STD_ASPECT = {"1:1": 1/1, "4:5": 4/5, "9:16": 9/16, "16:9": 16/9}
+
+def _closest_aspect(w: int, h: int) -> str:
+    ratio = w / h
+    return min(_STD_ASPECT, key=lambda k: abs(_STD_ASPECT[k] - ratio))
+
 def scan():
     out=[]
     for p in ROOT.rglob("*"):
@@ -21,7 +27,7 @@ def scan():
                 "width": w,
                 "height": h,
                 "ratio": round(w/h,2),
-                "provider":"unknown","model":"unknown","aspect":f"{w}:{h}","created_at":p.stat().st_mtime
+                "provider":"unknown","model":"unknown","aspect":_closest_aspect(w,h),"aspect_raw":f"{w}:{h}","created_at":p.stat().st_mtime
             })
         except Exception:
             continue
@@ -43,11 +49,11 @@ def enrich(items):
 
     for it in items:
         meta=by_name.get(it["filename"],{})
-        it.setdefault("original_prompt", meta.get("original_prompt"))
-        it.setdefault("enhanced_prompt", meta.get("enhanced_prompt"))
-        it.setdefault("provider", meta.get("provider", it.get("provider")))
-        it.setdefault("model", meta.get("model", it.get("model")))
-        it.setdefault("aspect", meta.get("aspect", it.get("aspect")))
+        if meta.get("original_prompt"): it["original_prompt"]=meta["original_prompt"]
+        if meta.get("enhanced_prompt"): it["enhanced_prompt"]=meta["enhanced_prompt"]
+        if meta.get("provider"): it["provider"]=meta["provider"]
+        if meta.get("model"): it["model"]=meta["model"]
+        if meta.get("aspect"): it["aspect"]=meta["aspect"]
         it.setdefault("status","ok" if Path(it["path"]).exists() else "missing")
     return items
 
@@ -56,6 +62,7 @@ def handler():
     params=urllib.parse.parse_qs(qs)
     params={k:(v[0] if v else "") for k,v in params.items()}
     items=scan()
+    items=enrich(items)
     q=(params.get("q") or "").strip().lower()
     if q:
         blob=lambda it: " ".join(filter(None,[it.get("filename",""),it.get("original_prompt","") or "",it.get("provider","") or "",it.get("model","") or "",it.get("aspect","") or ""])).lower()
