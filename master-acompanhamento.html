@@ -69,6 +69,16 @@
   .updates { margin-top: 10px; padding: 10px; border-radius: 10px; background: rgba(15,23,42,.6); border: 1px solid var(--line); }
   .updates li { margin: 4px 0; color: var(--muted); font-size: 12px; }
   .updates li::before { content: "•"; color: var(--blue); margin-right: 8px; }
+  .next {
+    margin-top: 10px; padding: 10px; border-radius: 10px; background: rgba(124,58,237,.08); border: 1px solid rgba(124,58,237,.25);
+  }
+  .next-title { font-size: 12px; font-weight: 700; color: #c4b5fd; text-transform: uppercase; letter-spacing: .12em; margin-bottom: 6px; }
+  .next li { margin: 4px 0; color: var(--muted); font-size: 12px; }
+  .next li::before { content: "→"; color: var(--purple); margin-right: 8px; }
+  .evolution { margin-top: 10px; padding: 10px; border-radius: 10px; background: rgba(16,185,129,.06); border: 1px solid rgba(16,185,129,.25); }
+  .evolution-title { font-size: 12px; font-weight: 700; color: #6ee7b7; text-transform: uppercase; letter-spacing: .12em; margin-bottom: 6px; }
+  .evolution li { margin: 4px 0; color: var(--muted); font-size: 12px; }
+  .evolution li::before { content: "↻"; color: var(--green); margin-right: 8px; }
 </style>
 </head>
 <body>
@@ -76,7 +86,7 @@
     <header>
       <div>
         <h1>EPQ · Master · Acompanhamento</h1>
-        <p>Status dos projetos em andamento</p>
+        <p>Status dos projetos em andamento — evolução autônoma</p>
       </div>
       <div class="tag" style="padding: 6px 10px; border-radius: 999px; font-size: 11px; background: rgba(59,130,246,.12); color: #cfe3ff; border: 1px solid rgba(59,130,246,.25);">Master</div>
     </header>
@@ -95,6 +105,23 @@
               <li>Protocolo MASTER ORQUESTRADOR ativo</li>
               <li>Fila global de tarefas funcionando</li>
               <li>Delegação automática por projeto</li>
+              <li>Persistência local da fila implementada</li>
+            </ul>
+          </div>
+          <div class="next">
+            <div class="next-title">Próximos passos</div>
+            <ul>
+              <li>Adicionar status por agente</li>
+              <li>Criar dashboard visual do Cérebro</li>
+              <li>Integrar com painel Master</li>
+            </ul>
+          </div>
+          <div class="evolution">
+            <div class="evolution-title">Evolução autônoma</div>
+            <ul>
+              <li>Revisão de protocolo concluída</li>
+              <li>Novo checkpoint definido para 22h</li>
+              <li>Aguardando validação técnica</li>
             </ul>
           </div>
         </div>
@@ -110,6 +137,23 @@
               <li>Autenticação OAuth OK</li>
               <li>Pasta de currículos acessível</li>
               <li>Fotos do Benício mapeadas</li>
+              <li>Integração com página de vagas iniciada</li>
+            </ul>
+          </div>
+          <div class="next">
+            <div class="next-title">Próximos passos</div>
+            <ul>
+              <li>Validar token com refresh automático</li>
+              <li>Mapear pastas de currículos por tipo</li>
+              <li>Finalizar integração com vagas</li>
+            </ul>
+          </div>
+          <div class="evolution">
+            <div class="evolution-title">Evolução autônoma</div>
+            <ul>
+              <li>Nova referência de pasta adicionada</li>
+              <li>Estrutura de currículos revisada</li>
+              <li>Aguardando teste de aplicação real</li>
             </ul>
           </div>
         </div>
@@ -125,6 +169,23 @@
               <li>Prompt de Guarda Municipal criado</li>
               <li>Flux 3 indisponível no momento</li>
               <li>Aguardando alternativa de geração</li>
+              <li>Referências visuais reunidas</li>
+            </ul>
+          </div>
+          <div class="next">
+            <div class="next-title">Próximos passos</div>
+            <ul>
+              <li>Testar modelo alternativo de geração</li>
+              <li>Criar biblioteca de referências visuais</li>
+              <li>Integrar com pasta do Drive de arte</li>
+            </ul>
+          </div>
+          <div class="evolution">
+            <div class="evolution-title">Evolução autônoma</div>
+            <ul>
+              <li>Framework de prompts revisado</li>
+              <li>Novas alternativas de modelo avaliadas</li>
+              <li>Checkpoint de qualidade criado</li>
             </ul>
           </div>
         </div>
@@ -140,6 +201,23 @@
               <li>Redesign concluído</li>
               <li>Logo EPQ integrado</li>
               <li>Modulares por área</li>
+              <li>Nova estrutura de navegação revisada</li>
+            </ul>
+          </div>
+          <div class="next">
+            <div class="next-title">Próximos passos</div>
+            <ul>
+              <li>Adicionar widget de métricas em tempo real</li>
+              <li>Integrar status dos projetos no Master</li>
+              <li>Criar tema editável por área</li>
+            </ul>
+          </div>
+          <div class="evolution">
+            <div class="evolution-title">Evolução autônoma</div>
+            <ul>
+              <li>Revisão de UX concluída</li>
+              <li>Novos módulos de integração avaliados</li>
+              <li>Checkpoint de usabilidade criado</li>
             </ul>
           </div>
         </div>
@@ -155,6 +233,15 @@
         <p>• Central EPQ com divisores e emojis</p>
         <p>• B2B Opportunity Finder ajustado para não inventar leads</p>
         <p>• Google Drive autenticado para acesso a currículos</p>
+        <p>• Sistema de Iconografia EPQ aberto em modo autônomo</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Próximo checkpoint</h2>
+      <div class="card">
+        <p><strong>Quando:</strong> 22h</p>
+        <p><strong>Foco:</strong> revisão geral dos projetos, ajustes de autonomia e próximas decisões estratégicas.</p>
       </div>
     </div>
 
