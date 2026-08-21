@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EPQ · Master · Acompanhamento de Projetos</title>
+<style>
+  :root {
+    --bg:#0b1220;
+    --panel:#0f172a;
+    --panel-2:#111b2d;
+    --line:#1f2d42;
+    --text:#e6e9ef;
+    --muted:#8a93a6;
+    --blue:#3b82f6;
+    --green:#10b981;
+    --amber:#f59e0b;
+    --red:#ef4444;
+    --purple:#7c3aed;
+    --radius:14px;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    font-family: ui-sans-serif, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial;
+    background: radial-gradient(1200px 800px at 20% -10%, rgba(59,130,246,.18), transparent),
+                radial-gradient(1000px 700px at 80% 10%, rgba(124,58,237,.15), transparent),
+                var(--bg);
+    color: var(--text);
+  }
+  .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+  header {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    padding: 18px 18px 14px; border-bottom: 1px solid var(--line);
+    background: linear-gradient(180deg, rgba(15,23,42,.7), rgba(15,23,42,.4));
+    backdrop-filter: blur(10px);
+    position: sticky; top: 0; z-index: 50;
+  }
+  header h1 { font-size: 18px; margin: 0; letter-spacing: .2px; }
+  header p { margin: 6px 0 0; color: var(--muted); font-size: 13px; }
+  .section { margin-top: 22px; }
+  .section h2 { font-size: 15px; color: var(--muted); text-transform: uppercase; letter-spacing: .14em; margin: 0 0 10px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+  .card {
+    background: linear-gradient(180deg, rgba(15,23,42,.85), rgba(17,27,45,.75));
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.18);
+  }
+  .card h3 { margin: 0 0 8px; font-size: 15px; color: #e8f1ff; }
+  .status {
+    display: inline-flex; align-items: center; gap: 8px; padding: 6px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; margin-bottom: 10px;
+  }
+  .status.ok { background: rgba(16,185,129,.12); color: #6ee7b7; border: 1px solid rgba(16,185,129,.25); }
+  .status.warn { background: rgba(245,158,11,.12); color: #fcd34d; border: 1px solid rgba(245,158,11,.25); }
+  .status.error { background: rgba(239,68,68,.12); color: #fca5a5; border: 1px solid rgba(239,68,68,.25); }
+  .status.info { background: rgba(59,130,246,.12); color: #cfe3ff; border: 1px solid rgba(59,130,246,.25); }
+  .card p { margin: 6px 0; color: var(--muted); font-size: 13px; line-height: 1.5; }
+  .card a { color: var(--blue); text-decoration: none; }
+  .card a:hover { text-decoration: underline; }
+  .actions { margin-top: 10px; display: flex; gap: 10px; flex-wrap: wrap; }
+  .link {
+    display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 10px; font-size: 13px; font-weight: 600; text-decoration: none; border: 1px solid transparent;
+  }
+  .link.primary { background: rgba(59,130,246,.14); color: #e8f1ff; border-color: rgba(59,130,246,.35); }
+  .link.primary:hover { background: rgba(59,130,246,.25); }
+  .updates { margin-top: 10px; padding: 10px; border-radius: 10px; background: rgba(15,23,42,.6); border: 1px solid var(--line); }
+  .updates li { margin: 4px 0; color: var(--muted); font-size: 12px; }
+  .updates li::before { content: "•"; color: var(--blue); margin-right: 8px; }
+</style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div>
+        <h1>EPQ · Master · Acompanhamento</h1>
+        <p>Status dos projetos em andamento</p>
+      </div>
+      <div class="tag" style="padding: 6px 10px; border-radius: 999px; font-size: 11px; background: rgba(59,130,246,.12); color: #cfe3ff; border: 1px solid rgba(59,130,246,.25);">Master</div>
+    </header>
+
+    <div class="section">
+      <h2>Projetos em andamento</h2>
+      <div class="grid">
+        <div class="card">
+          <div class="status info">EM ANDAMENTO</div>
+          <h3>🧠 Cérebro</h3>
+          <p>Orquestrador central do Hermes. Responsável por gerenciar projetos, tarefas, agentes, prioridades e fila global de execução.</p>
+          <p><strong>Função:</strong> Master Orquestrador</p>
+          <p><strong>Status:</strong> Ativo</p>
+          <div class="updates">
+            <ul>
+              <li>Protocolo MASTER ORQUESTRADOR ativo</li>
+              <li>Fila global de tarefas funcionando</li>
+              <li>Delegação automática por projeto</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="status ok">OPERACIONAL</div>
+          <h3>📁 Drive EPQ</h3>
+          <p>Acesso ao Google Drive configurado e autenticado. Pasta de currículos e fotos do Benício disponíveis.</p>
+          <p><strong>Token:</strong> Ativo</p>
+          <p><strong>Última verificação:</strong> Hoje</p>
+          <div class="updates">
+            <ul>
+              <li>Autenticação OAuth OK</li>
+              <li>Pasta de currículos acessível</li>
+              <li>Fotos do Benício mapeadas</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="status warn">EM TESTE</div>
+          <h3>🎨 Gerador de Imagens</h3>
+          <p>Geração de arte para EPQ via IA. Em desenvolvimento com referências visuais e prompts estruturados.</p>
+          <p><strong>Modelo:</strong> FLUX 3 / alternativas</p>
+          <p><strong>Status:</strong> Testando</p>
+          <div class="updates">
+            <ul>
+              <li>Prompt de Guarda Municipal criado</li>
+              <li>Flux 3 indisponível no momento</li>
+              <li>Aguardando alternativa de geração</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="status info">EM ANDAMENTO</div>
+          <h3>🖥️ Painel Command Center (IA Hib)</h3>
+          <p>Central EPQ no estilo Dark Futuristic SaaS. Dashboard unificado com acesso a todos os painéis e projetos.</p>
+          <p><strong>URL:</strong> <a href="https://flavio-guedes.github.io/epq-central/" target="_blank" rel="noopener">flavio-guedes.github.io/epq-central/</a></p>
+          <p><strong>Status:</strong> Operacional</p>
+          <div class="updates">
+            <ul>
+              <li>Redesign concluído</li>
+              <li>Logo EPQ integrado</li>
+              <li>Modulares por área</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Ações recentes</h2>
+      <div class="card">
+        <p>• Boulevarde de oportunidades reformulado com botões por cargo</p>
+        <p>• Página de vagas pessoal criada em projetos</p>
+        <p>• Playbook de Marketing atualizado com calendário Agosto→Setembro</p>
+        <p>• Central EPQ com divisores e emojis</p>
+        <p>• B2B Opportunity Finder ajustado para não inventar leads</p>
+        <p>• Google Drive autenticado para acesso a currículos</p>
+      </div>
+    </div>
+
+    <div class="actions">
+      <a class="link primary" href="https://github.com/flavio-guedes/epq-projetos" target="_blank" rel="noopener">Abrir repositório de projetos</a>
+      <a class="link primary" href="https://flavio-guedes.github.io/epq-projetos/" target="_blank" rel="noopener">Ver projetos publicados</a>
+    </div>
+  </div>
+</body>
+</html>
