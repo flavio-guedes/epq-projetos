@@ -1,0 +1,25 @@
+{
+  "id": "qa-agent",
+  "nome": "QA Agent",
+  "descricao": "Agente responsavel por qualidade de software, automacao de testes, estrategia de testes e integracao com CI/CD.",
+  "skills": [
+    "Cypress",
+    "JavaScript",
+    "Testes E2E",
+    "Testes de API",
+    "Testes de Regressao",
+    "Grafana",
+    "Sentry",
+    "CI/CD",
+    "Documentacao de Testes"
+  ],
+  "responsabilidades": [
+    "Projetar e manter suítes de testes automatizados",
+    "Definir estratégia de testes",
+    "Executar E2E, API, regressão e integração",
+    "Colaborar com times de desenvolvimento",
+    "Mentorar outros QAs"
+  ],
+  "nivel": "Senior",
+  "status": "ATIVO"
+}
