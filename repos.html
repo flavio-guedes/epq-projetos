@@ -519,8 +519,8 @@ function render() {
           <div class="detail-section">
             <div class="detail-label">Links</div>
             <div class="detail-text">
-              <a href="${r.url}" target="_blank" rel="noopener" style="color:var(--cyan)">Repositório</a>
-              ${r.pages ? ` | <a href="${r.pages}" target="_blank" rel="noopener" style="color:var(--green)">Publicado</a>` : ''}
+              <a class="btn" href="${r.url}" target="_blank" rel="noopener">Repositório</a>
+              ${r.pages ? `<a class="btn primary" href="${r.pages}" target="_blank" rel="noopener">Página publicada</a>` : ''}
             </div>
           </div>
         </div>
