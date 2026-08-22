@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Projetos · Plano de Skills</title>
+<style>
+  :root {
+    --bg:#0b1220;
+    --panel:#0f172a;
+    --panel-2:#111b2d;
+    --line:#1f2d42;
+    --text:#e6e9ef;
+    --muted:#8a93a6;
+    --blue:#3b82f6;
+    --green:#10b981;
+    --amber:#f59e0b;
+    --red:#ef4444;
+    --purple:#7c3aed;
+    --radius:14px;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    font-family: ui-sans-serif, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial;
+    background: radial-gradient(1200px 800px at 20% -10%, rgba(59,130,246,.18), transparent),
+                radial-gradient(1000px 700px at 80% 10%, rgba(124,58,237,.15), transparent),
+                var(--bg);
+    color: var(--text);
+  }
+  .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+  header {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    padding: 18px 18px 14px; border-bottom: 1px solid var(--line);
+    background: linear-gradient(180deg, rgba(15,23,42,.7), rgba(15,23,42,.4));
+    backdrop-filter: blur(10px);
+    position: sticky; top: 0; z-index: 50;
+  }
+  header h1 { font-size: 18px; margin: 0; letter-spacing: .2px; }
+  header p { margin: 6px 0 0; color: var(--muted); font-size: 13px; }
+  .section { margin-top: 22px; }
+  .section h2 { font-size: 15px; color: var(--muted); text-transform: uppercase; letter-spacing: .14em; margin: 0 0 10px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+  .card {
+    background: linear-gradient(180deg, rgba(15,23,42,.85), rgba(17,27,45,.75));
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.18);
+  }
+  .card h3 { margin: 0 0 8px; font-size: 15px; color: #e8f1ff; }
+  .tag { display: inline-block; padding: 4px 8px; border-radius: 999px; font-size: 11px; background: rgba(59,130,246,.12); color: #cfe3ff; border: 1px solid rgba(59,130,246,.25); margin-right: 8px; }
+  .tbl-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius); margin-top: 16px; }
+  table { width: 100%; border-collapse: collapse; min-width: 900px; }
+  th, td { text-align: left; padding: 10px 12px; font-size: 12px; border-bottom: 1px solid var(--line); }
+  th { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 10.5px; letter-spacing: .12em; color: #fff; text-transform: uppercase; background: rgba(59,130,246,.12); }
+  td { color: var(--muted); }
+  tr:last-child td { border-bottom: none; }
+  .actions { margin-top: 10px; display: flex; gap: 10px; flex-wrap: wrap; }
+  .link {
+    display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 10px; font-size: 13px; font-weight: 600; text-decoration: none; border: 1px solid transparent;
+  }
+  .link.primary { background: rgba(59,130,246,.14); color: #e8f1ff; border-color: rgba(59,130,246,.35); }
+  .link.primary:hover { background: rgba(59,130,246,.25); }
+</style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div>
+        <h1>Projetos · Plano de Skills</h1>
+        <p>Trilhas práticas para as vagas: Tech Lead ServiceNow, QA Automation e Java Backend.</p>
+      </div>
+    </header>
+
+    <div class="section">
+      <h2>Tech Lead ServiceNow</h2>
+      <div class="card">
+        <p><span class="tag">Customer Service Management</span><span class="tag">ServiceNow</span><span class="tag">Tech Lead</span></p>
+        <p><strong>Skills alvo:</strong> ServiceNow CSM, JavaScript, Flow Designer, IntegrationHub, REST, CI/CD, gestão de time, stakeholders globais.</p>
+        <p><strong>Certificações:</strong> CSA, CAD, CIS-CSM</p>
+        <p><strong>Diferenciais:</strong> ITSM, ITOM, FSM, App Engine</p>
+        <div class="tbl-wrap">
+          <table>
+            <tr><th>Skill</th><th>Nível alvo</th><th>Ação prática</th></tr>
+            <tr><td>ServiceNow CSM</td><td>Avançado</td><td>Estudar docs oficiais + laboratório prático</td></tr>
+            <tr><td>JavaScript</td><td>Avançado</td><td>Projetos de automação e scripts ServiceNow</td></tr>
+            <tr><td>Flow Designer</td><td>Avançado</td><td>Montar fluxos reais de atendimento</td></tr>
+            <tr><td>IntegrationHub</td><td>Avançado</td><td>Criar integrações REST simuladas</td></tr>
+            <tr><td>REST</td><td>Avançado</td><td>Testar endpoints, autenticação e payloads</td></tr>
+            <tr><td>CI/CD</td><td>Intermediário</td><td>Pipeline de deploy de customizações</td></tr>
+            <tr><td>Mentoria técnica</td><td>Intermediário</td><td>Guiar revisões e onboarding</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>QA Automation Engineer</h2>
+      <div class="card">
+        <p><span class="tag">Cypress</span><span class="tag">JavaScript</span><span class="tag">QA</span></p>
+        <p><strong>Skills alvo:</strong> Cypress, JavaScript, E2E, API, regression, CI/CD, Grafana, Sentry, documentação de testes.</p>
+        <div class="tbl-wrap">
+          <table>
+            <tr><th>Skill</th><th>Nível alvo</th><th>Ação prática</th></tr>
+            <tr><td>Cypress</td><td>Avançado</td><td>Suíte real com E2E + API</td></tr>
+            <tr><td>JavaScript</td><td>Avançado</td><td>Automação e helpers reutilizáveis</td></tr>
+            <tr><td>E2E/API/Regression</td><td>Avançado</td><td>Cobrir fluxos críticos</td></tr>
+            <tr><td>CI/CD</td><td>Intermediário</td><td>Rodar testes no pipeline</td></tr>
+            <tr><td>Grafana/Sentry</td><td>Intermediário</td><td>Monitorar falhas e performance</td></tr>
+            <tr><td>Documentação</td><td>Intermediário</td><td>Casos de teste e relatórios claros</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Java Backend Developer</h2>
+      <div class="card">
+        <p><span class="tag">Java</span><span class="tag">Spring Boot</span><span class="tag">Cloud</span></p>
+        <p><strong>Skills alvo:</strong> Java, Spring Boot, REST APIs, SQL/otimização, AWS/GCP/Azure, code review, mentoria, DDD/microserviços, CI/CD.</p>
+        <div class="tbl-wrap">
+          <table>
+            <tr><th>Skill</th><th>Nível alvo</th><th>Ação prática</th></tr>
+            <tr><td>Java/Spring Boot</td><td>Avançado</td><td>APIs de produção simulada</td></tr>
+            <tr><td>REST APIs</td><td>Avançado</td><td>Contratos, versionamento e testes</td></tr>
+            <tr><td>SQL/Otimização</td><td>Avançado</td><td>Consultas complexas + índices</td></tr>
+            <tr><td>AWS/GCP/Azure</td><td>Intermediário</td><td>Deploy e observabilidade básica</td></tr>
+            <tr><td>DDD/Microserviços</td><td>Intermediário</td><td>Modelagem e separação por domínio</td></tr>
+            <tr><td>CI/CD</td><td>Intermediário</td><td>Pipeline com build, teste e deploy</td></tr>
+            <tr><td>Code review/Mentoria</td><td>Intermediário</td><td>Revisões estruturadas e guias</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <a class="link primary" href="https://github.com/flavio-guedes/epq-projetos" target="_blank" rel="noopener">Abrir repositório</a>
+      <a class="link primary" href="https://flavio-guedes.github.io/epq-projetos/minhas-vagas.html" target="_blank" rel="noopener">Ver vagas</a>
+    </div>
+  </div>
+</body>
+</html>
