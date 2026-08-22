@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EPQ Projetos — Repositórios</title>
+<style>
+  :root {
+    --bg: #020b16;
+    --surface: #0a1628;
+    --surface-2: #0f2140;
+    --border: #1a3a5c;
+    --text: #e6f3ff;
+    --text-muted: #7d9cbd;
+    --cyan: #22d3ee;
+    --cyan-dim: rgba(34,211,238,0.25);
+    --green: #34d399;
+    --green-dim: rgba(52,211,153,0.15);
+    --orange: #fbbf24;
+    --orange-dim: rgba(251,191,36,0.15);
+    --red: #f87171;
+    --red-dim: rgba(248,113,113,0.18);
+    --purple: #a78bfa;
+    --purple-dim: rgba(167,139,250,0.15);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { margin: 0; height: 100%; overflow: hidden; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow: hidden;
+  }
+  :focus-visible {
+    outline: 2px solid var(--cyan);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+  .grid-bg {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(rgba(34,211,238,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(34,211,238,0.06) 1px, transparent 1px);
+    background-size: 40px 40px;
+    z-index: 0;
+  }
+  .container {
+    position: relative;
+    z-index: 1;
+    height: 100vh;
+    max-width: 1800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    gap: 12px;
+  }
+  header {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    flex-shrink: 0;
+  }
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px;
+    position: relative;
+    overflow: hidden;
+  }
+  .panel::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+    opacity: 0.4;
+  }
+  .panel-title--compact {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 700;
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    color: var(--cyan);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .panel-title--compact::before {
+    content: "";
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--cyan);
+    box-shadow: 0 0 6px var(--cyan);
+  }
+  .metric {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--cyan);
+    text-shadow: 0 0 20px var(--cyan-dim);
+    line-height: 1;
+  }
+  .metric-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+  .toolbar {
+    display: flex;
+    justify-content: space-between;
+    flex-shrink: 0;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .search-input, .filter-select {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    outline: none;
+  }
+  .search-input { flex: 1; min-width: 200px; }
+  .search-input:focus, .filter-select:focus { border-color: var(--cyan); }
+  .main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+  .content-area {
+    overflow-y: auto;
+    flex: 1;
+    min-height: 0;
+    padding-right: 4px;
+  }
+  .content-area::-webkit-scrollbar { width: 6px; }
+  .content-area::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  .section-title {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    color: var(--cyan);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-title::before {
+    content: "";
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--cyan);
+    box-shadow: 0 0 8px var(--cyan);
+  }
+  .item {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 8px;
+  }
+  .item:hover {
+    border-color: var(--cyan);
+    box-shadow: 0 0 12px var(--cyan-dim);
+  }
+  .item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .item-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .item-name::before {
+    content: "";
+    width: 3px; height: 3px;
+    border-radius: 50%;
+    background: var(--cyan);
+    box-shadow: 0 0 4px var(--cyan);
+  }
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 6px;
+  }
+  .chip {
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    border: 1px solid var(--border);
+    background: rgba(34,211,238,0.08);
+    color: var(--text);
+    white-space: nowrap;
+  }
+  .chip.ok { background: var(--green-dim); color: var(--green); border-color: rgba(52,211,153,0.3); }
+  .chip.warn { background: var(--orange-dim); color: var(--orange); border-color: rgba(251,191,36,0.3); }
+  .chip.danger { background: var(--red-dim); color: var(--red); border-color: rgba(248,113,113,0.3); }
+  .chip.plan { background: var(--purple-dim); color: var(--purple); border-color: rgba(167,139,250,0.3); }
+  .item-body {
+    display: none;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid var(--border);
+  }
+  .item.expanded .item-body { display: block; }
+  .item.expanded .item-expand { transform: rotate(45deg); }
+  .item-expand {
+    color: var(--cyan);
+    font-size: 12px;
+    transition: transform 0.2s;
+    flex-shrink: 0;
+  }
+  .detail-section { margin-bottom: 8px; }
+  .detail-section:last-child { margin-bottom: 0; }
+  .detail-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+  .detail-text {
+    font-size: 12px;
+    color: var(--text);
+    line-height: 1.5;
+  }
+  .actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.15s;
+  }
+  .btn:hover { border-color: var(--cyan); color: var(--cyan); }
+  .btn.primary {
+    background: var(--cyan-dim);
+    border-color: var(--cyan);
+    color: var(--cyan);
+  }
+  .empty-state {
+    padding: 24px 12px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  @media (max-width: 980px) {
+    header { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 640px) {
+    header { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="grid-bg"></div>
+<div class="container">
+  <header>
+    <div class="panel">
+      <div class="panel-title--compact">Repositórios</div>
+      <div class="metric" id="metric-repos">--</div>
+      <div class="metric-sub">Total mapeado</div>
+    </div>
+    <div class="panel">
+      <div class="panel-title--compact">Páginas públicas</div>
+      <div class="metric" id="metric-pages">--</div>
+      <div class="metric-sub">GitHub Pages</div>
+    </div>
+    <div class="panel">
+      <div class="panel-title--compact">Privados</div>
+      <div class="metric" id="metric-private">--</div>
+      <div class="metric-sub">Acesso restrito</div>
+    </div>
+  </header>
+
+  <div class="toolbar">
+    <input class="search-input" id="search" placeholder="Pesquisar repositório, descrição ou categoria..." />
+    <select class="filter-select" id="group-filter">
+      <option value="all">Todos os grupos</option>
+      <option value="EPQ">EPQ</option>
+      <option value="Projetos">Projetos</option>
+      <option value="Privados">Privados</option>
+    </select>
+  </div>
+
+  <div class="main">
+    <div class="content-area" id="content"></div>
+  </div>
+</div>
+
+<script>
+const REPOS = [
+  {
+    name: "epq",
+    description: "EPQ Marketing",
+    url: "https://github.com/flavio-guedes/epq",
+    pages: "https://flavio-guedes.github.io/epq/",
+    group: "EPQ",
+    status: "public"
+  },
+  {
+    name: "epq-central",
+    description: "Central EPQ",
+    url: "https://github.com/flavio-guedes/epq-central",
+    pages: "https://flavio-guedes.github.io/epq-central/",
+    group: "EPQ",
+    status: "public"
+  },
+  {
+    name: "epq-projetos",
+    description: "Painel unificado dos projetos EPQ",
+    url: "https://github.com/flavio-guedes/epq-projetos",
+    pages: "https://flavio-guedes.github.io/epq-projetos/",
+    group: "EPQ",
+    status: "public"
+  },
+  {
+    name: "painel-oportunidades",
+    description: "Boulevard de Oportunidades",
+    url: "https://github.com/flavio-guedes/painel-oportunidades",
+    pages: "https://flavio-guedes.github.io/painel-oportunidades/",
+    group: "EPQ",
+    status: "public"
+  },
+  {
+    name: "pedagogico",
+    description: "Painel Pedagógico",
+    url: "https://github.com/flavio-guedes/pedagogico",
+    pages: "https://flavio-guedes.github.io/pedagogico/",
+    group: "EPQ",
+    status: "public"
+  },
+  {
+    name: "prospects",
+    description: "Painel de Prospecção",
+    url: "https://github.com/flavio-guedes/prospects",
+    pages: "https://flavio-guedes.github.io/prospects/",
+    group: "EPQ",
+    status: "public"
+  },
+  {
+    name: "pessoas",
+    description: "Repositório de pessoas",
+    url: "https://github.com/flavio-guedes/pessoas",
+    pages: null,
+    group: "EPQ",
+    status: "public"
+  },
+  {
+    name: "epq-vagas",
+    description: "Repositório de vagas/currículos",
+    url: "https://github.com/flavio-guedes/epq-vagas",
+    pages: null,
+    group: "EPQ",
+    status: "public"
+  },
+  {
+    name: "central-prospeccao-whatsapp",
+    description: "Central de Prospecção WhatsApp",
+    url: "https://github.com/flavio-guedes/central-prospeccao-whatsapp",
+    pages: "https://flavio-guedes.github.io/central-prospeccao-whatsapp/",
+    group: "Projetos",
+    status: "public"
+  },
+  {
+    name: "b2b-opportunity-finder",
+    description: "B2B Opportunity Finder",
+    url: "https://github.com/flavio-guedes/b2b-opportunity-finder",
+    pages: "https://flavio-guedes.github.io/b2b-opportunity-finder/",
+    group: "Projetos",
+    status: "public"
+  },
+  {
+    name: "Cerebro",
+    description: "Cérebro / Radar do ecossistema",
+    url: "https://github.com/flavio-guedes/Cerebro",
+    pages: "https://flavio-guedes.github.io/Cerebro/",
+    group: "Projetos",
+    status: "public"
+  },
+  {
+    name: "ai-hub",
+    description: "AI Hub / interfaces standalone",
+    url: "https://github.com/flavio-guedes/ai-hub",
+    pages: null,
+    group: "Projetos",
+    status: "public"
+  },
+  {
+    name: "sistema-prospeccao",
+    description: "Sistema de Prospecção",
+    url: "https://github.com/flavio-guedes/sistema-prospeccao",
+    pages: null,
+    group: "Projetos",
+    status: "public"
+  },
+  {
+    name: "portfolio",
+    description: "Portfólio",
+    url: "https://github.com/flavio-guedes/portfolio",
+    pages: "https://flavio-guedes.github.io/portfolio/",
+    group: "Projetos",
+    status: "public"
+  },
+  {
+    name: "IBM",
+    description: "Igreja Batista do Meier",
+    url: "https://github.com/flavio-guedes/IBM",
+    pages: null,
+    group: "Projetos",
+    status: "public"
+  },
+  {
+    name: "agentes",
+    description: "Agentes do ecossistema",
+    url: "https://github.com/flavio-guedes/agentes",
+    pages: null,
+    group: "Projetos",
+    status: "public"
+  },
+  {
+    name: "hermes",
+    description: "Orquestração autônoma de agentes/skills/tools",
+    url: "https://github.com/flavio-guedes/hermes",
+    pages: null,
+    group: "Privados",
+    status: "private"
+  },
+  {
+    name: "flavio-guedes-private",
+    description: "Repositório privado pessoal",
+    url: "https://github.com/flavio-guedes/flavio-guedes-private",
+    pages: null,
+    group: "Privados",
+    status: "private"
+  }
+];
+
+let currentFilter = { group: 'all', search: '' };
+
+function updateMetrics() {
+  document.getElementById('metric-repos').textContent = String(REPOS.length);
+  document.getElementById('metric-pages').textContent = String(REPOS.filter(r => r.pages).length);
+  document.getElementById('metric-private').textContent = String(REPOS.filter(r => r.status === 'private').length);
+}
+
+function render() {
+  const container = document.getElementById('content');
+  const search = currentFilter.search.toLowerCase();
+  const filtered = REPOS.filter(r => {
+    const matchSearch = !search || [r.name, r.description, r.group].some(v => String(v).toLowerCase().includes(search));
+    const matchGroup = currentFilter.group === 'all' || r.group === currentFilter.group;
+    return matchSearch && matchGroup;
+  });
+
+  const groups = {};
+  for (const r of filtered) {
+    if (!groups[r.group]) groups[r.group] = [];
+    groups[r.group].push(r);
+  }
+
+  if (!filtered.length) {
+    container.innerHTML = '<div class="empty-state">Nenhum repositório encontrado com os filtros atuais.</div>';
+    return;
+  }
+
+  container.innerHTML = Object.keys(groups).map(group => {
+    const items = groups[group].map(r => {
+      const statusClass = r.status === 'private' ? 'danger' : 'ok';
+      const statusLabel = r.status === 'private' ? 'privado' : 'público';
+      return `
+        <div class="item">
+          <div class="item-header">
+            <span class="item-name">${r.name}</span>
+            <span class="chip ${statusClass}">${statusLabel}</span>
+          </div>
+          <div class="detail-section">
+            <div class="detail-label">Descrição</div>
+            <div class="detail-text">${r.description || '—'}</div>
+          </div>
+          <div class="detail-section">
+            <div class="detail-label">Links</div>
+            <div class="detail-text">
+              <a href="${r.url}" target="_blank" rel="noopener" style="color:var(--cyan)">Repositório</a>
+              ${r.pages ? ` | <a href="${r.pages}" target="_blank" rel="noopener" style="color:var(--green)">Publicado</a>` : ''}
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    return `
+      <div class="section-title">${group}</div>
+      ${items}
+    `;
+  }).join('');
+
+  updateMetrics();
+}
+
+function init() {
+  updateMetrics();
+  render();
+  document.getElementById('search').addEventListener('input', (e) => { currentFilter.search = e.target.value; render(); });
+  document.getElementById('group-filter').addEventListener('change', (e) => { currentFilter.group = e.target.value; render(); });
+}
+
+init();
+</script>
+</body>
+</html>
