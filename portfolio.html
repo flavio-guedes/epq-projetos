@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Portfólio — Sites Publicados</title>
+<style>
+  :root {
+    --bg: #0a0f1c;
+    --surface: #111827;
+    --elevated: #0f172a;
+    --border: #1f2937;
+    --text: #f3f4f6;
+    --muted: #9ca3af;
+    --accent: #10b981;
+    --accent-2: #38bdf8;
+    --accent-3: #a78bfa;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+  .container { max-width: 1200px; margin: 0 auto; padding: 26px; }
+
+  /* Header */
+  .hero {
+    position: relative;
+    border-radius: 22px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    box-shadow: 0 12px 35px rgba(0,0,0,.3);
+  }
+  .hero img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    display: block;
+    opacity: .85;
+  }
+  .hero-content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 28px;
+    background: linear-gradient(180deg, rgba(10,15,28,.15) 0%, rgba(10,15,28,.72) 60%, rgba(10,15,28,.92) 100%);
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: rgba(16,185,129,.12);
+    color: #a7f3d0;
+    border: 1px solid rgba(16,185,129,.25);
+    font-size: 13px;
+    font-weight: 600;
+    width: fit-content;
+  }
+  h1 { margin: 10px 0 6px; font-size: 28px; font-weight: 700; letter-spacing: .2px; }
+  .subtitle { margin: 0; color: #e5e7eb; font-size: 15px; max-width: 720px; line-height: 1.55; }
+
+  /* Search */
+  .search {
+    margin-top: 18px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .search input {
+    flex: 1;
+    min-width: 240px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    font-size: 14px;
+    outline: none;
+  }
+  .search input:focus { border-color: #10b981; }
+
+  /* KPI strip */
+  .kpi-strip {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-top: 18px;
+  }
+  @media (max-width: 860px) { .kpi-strip { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { .kpi-strip { grid-template-columns: 1fr; } }
+  .kpi {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 18px;
+  }
+  .kpi .label { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .12em; }
+  .kpi .value { margin-top: 8px; font-size: 22px; font-weight: 700; }
+  .kpi .meta { margin-top: 6px; color: var(--muted); font-size: 13px; }
+
+  /* Sections */
+  .section { margin-top: 28px; }
+  .section-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 14px; }
+  .section-title { margin: 0; font-size: 18px; font-weight: 600; }
+  .pill {
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: rgba(56,189,248,.12);
+    color: #bae6fd;
+    border: 1px solid rgba(56,189,248,.25);
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  @media (max-width: 860px) { .grid { grid-template-columns: 1fr; } }
+
+  /* Cards */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 18px;
+    transition: transform .08s ease, border-color .2s ease, box-shadow .2s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .card:hover { transform: translateY(-2px); border-color: #263550; box-shadow: 0 10px 28px rgba(0,0,0,.22); }
+  .card h3 { margin: 0; font-size: 15px; font-weight: 600; }
+  .card p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.5; }
+  .actions { margin-top: auto; display: flex; gap: 8px; flex-wrap: wrap; }
+  .btn {
+    padding: 8px 10px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--elevated);
+    color: var(--text);
+    text-decoration: none;
+    font-size: 13px;
+    transition: background .15s ease, border-color .15s ease;
+  }
+  .btn:hover { background: #0b1220; border-color: #374151; }
+  .btn.primary { background: rgba(16,185,129,.15); color: #d1fae5; border-color: rgba(16,185,129,.3); }
+  .btn.primary:hover { background: rgba(16,185,129,.22); }
+
+  footer { margin-top: 34px; color: var(--muted); font-size: 13px; text-align: center; padding-bottom: 10px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <header class="hero">
+    <img src="https://raw.githubusercontent.com/flavio-guedes/epq-projetos/main/iconografia-epq/03-icones/estudo.svg" alt="Portfólio" />
+    <div class="hero-content">
+      <div class="brand">Portfólio</div>
+      <h1>Sites Publicados</h1>
+      <div class="subtitle">Links organizados por clientes e projetos. Abra diretamente o HTML publicado.</div>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="search">
+      <input id="search" placeholder="Buscar por nome, cliente ou projeto..." oninput="render()" />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="kpi-strip">
+      <div class="kpi">
+        <div class="label">Total</div>
+        <div class="value" id="kpi-total">0</div>
+        <div class="meta">Páginas listadas</div>
+      </div>
+      <div class="kpi">
+        <div class="label">EPQ</div>
+        <div class="value" id="kpi-epq">0</div>
+        <div class="meta">Sites do cliente</div>
+      </div>
+      <div class="kpi">
+        <div class="label">Projetos</div>
+        <div class="value" id="kpi-projetos">0</div>
+        <div class="meta">Sites pessoais</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-header">
+      <h2 class="section-title">Sites</h2>
+      <div class="pill">Publicados</div>
+    </div>
+    <div class="grid" id="cards"></div>
+  </section>
+
+  <footer>
+    Painel de portfólio — HTML publicado sem repositório.
+  </footer>
+</div>
+
+<script>
+  const sites = [
+    { title: 'Portfolio Designhead', url: 'https://flavio-guedes.github.io/portfolio/designhead.html', client: 'Projetos', context: 'Página principal de portfólio de conteúdo e criação.' },
+    { title: 'Central EPQ', url: 'https://flavio-guedes.github.io/epq-central/', client: 'EPQ', context: 'Painel central do ecossistema EPQ.' },
+    { title: 'Painel Pedagógico', url: 'https://flavio-guedes.github.io/pedagogico/', client: 'EPQ', context: 'Painel pedagógico com foco em alocação inteligente.' },
+    { title: 'Onboarding Pedagógico', url: 'https://flavio-guedes.github.io/pedagogico/onboarding.html', client: 'EPQ', context: 'Onboarding da área pedagógica EPQ.' },
+    { title: 'Playbook de Atendimento', url: 'https://flavio-guedes.github.io/epq/playbookatendimento.html', client: 'EPQ', context: 'Playbook de atendimento com destaque para PMERJ.' },
+    { title: 'Playbook de Marketing', url: 'https://flavio-guedes.github.io/epq/playbookmkt.html', client: 'EPQ', context: 'Playbook de marketing com calendário e padrões.' },
+    { title: 'Plano de Conteúdo e Tráfego', url: 'https://flavio-guedes.github.io/epq/plano-conteudo-trafego.html', client: 'EPQ', context: 'Plano estratégico de conteúdo e tráfego.' },
+    { title: 'Campanha do Aulão', url: 'https://flavio-guedes.github.io/epq/planodivulgacao-aulao.html', client: 'EPQ', context: 'Plano de divulgação da campanha do aulão.' },
+    { title: 'Fluxo Comercial', url: 'https://flavio-guedes.github.io/epq/fluxocomercial.html', client: 'EPQ', context: 'Fluxo comercial mobile com cores por área.' },
+    { title: 'Área do Aluno', url: 'https://flavio-guedes.github.io/area-aluno/', client: 'EPQ', context: 'MVP da Área do Aluno com login, dashboard, questões, simulados, desempenho e cronograma.' },
+    { title: 'Banner Área do Aluno', url: 'https://flavio-guedes.github.io/area-aluno/banner.html', client: 'EPQ', context: 'Banner da Área do Aluno com identidade EPQ.' },
+    { title: 'Iconografia EPQ', url: 'https://flavio-guedes.github.io/epq-central/iconografia.html', client: 'EPQ', context: 'Sistema de iconografia EPQ.' },
+    { title: 'Boulevard de Oportunidades', url: 'https://flavio-guedes.github.io/painel-oportunidades/', client: 'Projetos', context: 'Painel de oportunidades transferido para repo-prospects.' },
+    { title: 'Cérebro', url: 'https://flavio-guedes.github.io/Cerebro/', client: 'Projetos', context: 'Painel vivo do ecossistema Hermes.' },
+    { title: 'Master Acompanhamento', url: 'https://flavio-guedes.github.io/epq-projetos/master-acompanhamento.html', client: 'Projetos', context: 'Painel Master de acompanhamento de evolução.' },
+    { title: 'Plano de Skills', url: 'https://flavio-guedes.github.io/epq-projetos/plano-skills.html', client: 'Projetos', context: 'Plano de skills para QA, Tech Lead e Java.' },
+    { title: 'Repositórios Hubble', url: 'https://flavio-guedes.github.io/epq-projetos/repos.html', client: 'Projetos', context: 'Painel de repositórios públicos do usuário.' },
+    { title: 'Central de Prospecção WhatsApp', url: 'https://flavio-guedes.github.io/central-prospeccao-whatsapp/', client: 'Projetos', context: 'Central de prospecção com empresas, contatos e links de WhatsApp/mailto.' },
+    { title: 'IBMéier — Ministério de Louvor', url: 'https://flavio-guedes.github.io/ibm-louvor/', client: 'IBMéier', context: 'Painel de renovação do Ministério de Louvor.' },
+    { title: 'IBMéier — CRM de Vagas', url: 'https://flavio-guedes.github.io/ibm-louvor/crm.html', client: 'IBMéier', context: 'CRM de vagas com status e filtros.' }
+  ];
+
+  function render() {
+    const q = document.getElementById('search').value.toLowerCase();
+    const cards = document.getElementById('cards');
+    const filtered = sites.filter(s => s.title.toLowerCase().includes(q) || s.client.toLowerCase().includes(q) || s.context.toLowerCase().includes(q));
+    cards.innerHTML = filtered.map(s => `
+      <div class="card">
+        <div>
+          <h3>${s.title}</h3>
+          <p>${s.context}</p>
+        </div>
+        <div class="actions">
+          <a class="btn primary" href="${s.url}" target="_blank">Abrir site</a>
+          <a class="btn" href="${s.url}" target="_blank">${s.url.replace('https://', '')}</a>
+        </div>
+      </div>
+    `).join('');
+    document.getElementById('kpi-total').textContent = filtered.length;
+    document.getElementById('kpi-epq').textContent = filtered.filter(s => s.client === 'EPQ').length;
+    document.getElementById('kpi-projetos').textContent = filtered.filter(s => s.client === 'Projetos' || s.client === 'IBMéier').length;
+  }
+
+  render();
+</script>
+</body>
+</html>
