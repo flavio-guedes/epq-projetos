@@ -1,178 +1,369 @@
-# Relatório Semanal — EPQ / Projetos Pessoais
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>EPQ · Agenda da Semana</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    background: radial-gradient(1200px 700px at 10% -10%, rgba(56,189,248,0.12), transparent 60%), radial-gradient(1000px 600px at 110% 10%, rgba(99,102,241,0.12), transparent 55%), linear-gradient(180deg, #0b1220 0%, #0f1b33 100%);
+    color: #e6f3ff;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  .noise {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: 0.07; mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    background-size: 220px 220px;
+  }
+  #app { position: relative; z-index: 1; }
+  .container { max-width: 1400px; margin: 0 auto; padding: 24px; }
+  header {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 24px;
+  }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .brand img { height: 36px; width: 36px; object-fit: contain; border-radius: 8px; background: rgba(255,255,255,0.08); padding: 4px; }
+  h1 { font-size: 20px; letter-spacing: 0.2px; color: #ffffff; }
+  .sub { color: #7d9cbd; font-size: 13px; margin-top: 2px; }
 
-**Período:** Semana atual  
-**Elaborado para:** Flávio Guedes  
-**Por:** Hermes (assistente de operação)  
-**Formato:** Markdown + HTML pronto para publicar/consultar
+  .panel {
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 18px; padding: 18px; margin-bottom: 18px;
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  }
 
----
+  .weeks-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; margin-bottom: 18px; }
+  .day-card {
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 14px; padding: 12px; cursor: pointer; min-height: 90px; transition: border-color .15s ease, transform .15s ease;
+  }
+  .day-card:hover { border-color: rgba(34,211,238,0.5); transform: translateY(-2px); }
+  .day-card .name { font-size: 11px; color: #7d9cbd; text-transform: uppercase; letter-spacing: 0.14em; margin-bottom: 6px; }
+  .day-card .date { font-size: 18px; font-weight: 700; color: #ffffff; }
+  .day-card .status { font-size: 11px; color: #7d9cbd; margin-top: 6px; }
 
-## 1. Nossa estrutura hoje
+  .priority-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 12px; }
+  .priority-item {
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.10); border-radius: 14px; padding: 12px; cursor: pointer; transition: border-color .15s ease;
+  }
+  .priority-item:hover { border-color: rgba(34,211,238,0.4); }
+  .priority-item .title { font-size: 13px; color: #ffffff; font-weight: 500; }
+  .priority-item .meta { font-size: 12px; color: #7d9cbd; margin-top: 4px; }
 
-Hoje a operação funciona com dois mundos separados, mas integrados:
+  .checklist { display: grid; gap: 8px; margin-top: 10px; }
+  .check-item {
+    display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: 12px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.10); cursor: pointer;
+  }
+  .check-item:hover { border-color: rgba(34,211,238,0.4); }
+  .check-item input { accent-color: #22d3ee; }
+  .check-item label { font-size: 13px; color: #e6f3ff; }
 
-- **EPQ = cliente**  
-  Tudo que é da EPQ vive em `flavio-guedes/epq-central`.  
-  Lá temos: playbook, fluxo comercial, relatórios, iconografia, case educação e agora o **follow-up de leads**.
+  .actions { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
+  .btn {
+    border: 1px solid rgba(255,255,255,0.18); color: #e6f3ff; background: rgba(255,255,255,0.08); padding: 9px 12px; border-radius: 12px; font-size: 13px; cursor: pointer;
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); transition: background .15s ease, border-color .15s ease;
+  }
+  .btn:hover { background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.32); }
+  .btn.primary { background: rgba(34,211,238,0.18); border-color: rgba(34,211,238,0.45); color: #cffafe; }
+  .btn.primary:hover { background: rgba(34,211,238,0.28); border-color: rgba(34,211,238,0.65); }
+  .btn.ghost { background: transparent; border-color: rgba(255,255,255,0.18); }
 
-- **Projetos = trabalho pessoal do Flávio**  
-  Tudo que é projeto/portfólio do Flávio vive em `flavio-guedes/epq-projetos`.  
-  Lá temos: relatórios por projeto, apresentações v2/v3, áudio de relatório e assets de portfólio.
+  .empty { color: #7d9cbd; font-size: 13px; }
 
-- **Outros repositórios auxiliares**
-  - `painel-oportunidades`: painel de vagas/publicações
-  - `prospects`: painel de prospecção com mensagens por frente/subfrente
-  - `portfolio`: site profissional com abas Produto/Marketing/Direção Criativa
+  @media (max-width: 1024px) {
+    .weeks-grid { grid-template-columns: repeat(4, 1fr); }
+    .priority-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 640px) {
+    .weeks-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+</style>
+</head>
+<body>
+<div class="noise"></div>
+<div id="app" class="container">
+  <header>
+    <div class="brand">
+      <img src="https://flavio-guedes.github.io/epq-central/logo.jpg" alt="EPQ" />
+      <div>
+        <h1>Agenda da Semana</h1>
+        <div class="sub">Segunda a domingo · Execução + Inspeção</div>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn primary" id="btn-create">+ Nova semana</button>
+      <button class="btn" id="btn-inspect">Inspecionar painel</button>
+    </div>
+  </header>
 
-**Princípio que seguimos:**
-- repositórios públicos no GitHub
-- deploy automático via Pages
-- HTML primeiro, sem backend
-- versão única por arquivo quando possível
-- commit + push + validação HTTP 200 como regra
+  <section class="panel" id="week-panel">
+    <div class="weeks-grid" id="weeks-grid"></div>
+    <div class="priority-grid" id="priority-grid"></div>
+  </section>
 
----
+  <section class="panel" id="checklist-panel" style="display:none;">
+    <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px; flex-wrap:wrap;">
+      <div>
+        <div style="font-size:10px; color:#7d9cbd; text-transform:uppercase; letter-spacing:0.14em; margin-bottom:6px;">Checklist da semana</div>
+        <div id="checklist-title" style="font-size:14px; color:#ffffff; font-weight:600;"></div>
+      </div>
+      <button class="btn ghost" id="btn-close-checklist">Fechar</button>
+    </div>
+    <div class="checklist" id="checklist"></div>
+    <div class="actions">
+      <button class="btn primary" id="btn-add-task">+ Tarefa</button>
+      <button class="btn" id="btn-clear-checked">Limpar concluídas</button>
+    </div>
+  </section>
 
-## 2. O que foi feito na semana
+  <section class="panel" id="inspection-panel" style="display:none;">
+    <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px; flex-wrap:wrap;">
+      <div>
+        <div style="font-size:10px; color:#7d9cbd; text-transform:uppercase; letter-spacing:0.14em; margin-bottom:6px;">Inspeção do painel</div>
+        <div id="inspection-title" style="font-size:14px; color:#ffffff; font-weight:600;">Painel de Oportunidades</div>
+      </div>
+      <button class="btn ghost" id="btn-close-inspection">Fechar</button>
+    </div>
+    <div class="checklist" id="inspection-list"></div>
+    <div class="actions">
+      <button class="btn primary" id="btn-add-issue">+ Registrar problema</button>
+      <button class="btn" id="btn-export-inspection">Exportar relatório</button>
+    </div>
+  </section>
+</div>
 
-### 2.1 Portfolio (`flavio-guedes/portfolio`)
-- atualizada `apresentacao-v2.html` com copy de **parceiro estratégico**
-- criada `apresentacao-v3.html` com storytelling **consultivo** e benefícios de automação
-- atualizado card no `index.html` para apontar para v3
-- criada `relatorios.html` com suporte a áudio e tarefas
-- adicionada aba **Relatórios** no `index.html`
+<script>
+  const STORAGE_KEY = 'epq_agenda_semana_v1';
+  const WEEKDAY_NAMES = ['Segunda','Terça','Quarta','Quinta','Sexta','Sábado','Domingo'];
 
-### 2.2 EPQ Projetos (`flavio-guedes/epq-projetos`)
-- criada `relatorios.html` com agrupamento por cliente/projeto
-- separado EPQ de Projetos nos filtros
-- adicionado campo de **tarefas** nos relatórios
-- adicionados campos **Tipo** (Vaga / Iniciativa), **Projeto** e **Etapa**
-- removidos filtros excessivos; agora mostra tudo agrupado
+  function today(){ return new Date().toISOString().slice(0,10); }
+  function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,8); }
+  function load(){ try { const raw = localStorage.getItem(STORAGE_KEY); return raw ? JSON.parse(raw) : []; } catch { return []; } }
+  function save(list){ localStorage.setItem(STORAGE_KEY, JSON.stringify(list)); }
+  function startOfWeek(dateStr){
+    const d = new Date(dateStr + 'T00:00:00');
+    const day = d.getDay();
+    const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+    const monday = new Date(d.setDate(diff));
+    const arr = [];
+    for (let i=0;i<7;i++){
+      const dt = new Date(monday);
+      dt.setDate(monday.getDate()+i);
+      arr.push(dt.toISOString().slice(0,10));
+    }
+    return arr;
+  }
+  function weekKey(d){ return 'week-' + d; }
 
-### 2.3 Painel de Prospecção (`flavio-guedes/prospects`)
-- adicionadas posições: Redator, Social Media, GP Marketing, GP Produto
-- inserido botão **Copiar** em cada bloco de texto
-- atualizado link do portfólio para `/parceria.html` em todas as mensagens
+  const defaultWeek = () => {
+    const days = startOfWeek(today());
+    return days.map((date, idx) => ({
+      id: uid(),
+      date,
+      label: WEEKDAY_NAMES[idx],
+      tasks: [
+        { id: uid(), text: 'Abrir painel de oportunidades e checar Hot/24h', done: false },
+        { id: uid(), text: 'Abrir follow-up de leads e checar Atrasados', done: false },
+      ],
+      priority: idx === 0 ? 'Alta' : idx === 2 ? 'Média' : 'Baixa',
+      note: idx === 0 ? 'Validação do painel de oportunidades + follow-up' : idx === 2 ? 'Revisão de mensagens de prospecção' : 'Execução operacional',
+    }));
+  };
 
-### 2.4 Painel de Oportunidades (`flavio-guedes/painel-oportunidades`)
-- título alterado para **v1 · Boulevard de Oportunidades**
-- filtros de tempo aplicados a **todos os cargos**
-- busca alterada de publicações para **LinkedIn Jobs**
-- adicionado filtro geográfico **Brasil/Latam**
-- ajustada lógica para não ocultar resultados no filtro de tempo
-- adicionados filtros:
-  - **Vagas** e **Publicações**
-  - **Hot** com Head/Lead/Diretor/Executivo e Pleno/Sênior
-  - **Candidatura simplificada** e **menos de 10 candidaturas**
-  - padrão **24 horas**
-  - modal desktop/mobile
-  - badge **Vaga / Publicação** em cada card
-- links ajustados para abrir no app do LinkedIn quando possível
+  const defaultInspection = {
+    id: uid(),
+    title: 'Painel de Oportunidades — Inspeção',
+    date: today(),
+    status: 'aberto',
+    issues: [
+      { id: uid(), text: 'Validar se botões aparecem no desktop e no mobile', done: false },
+      { id: uid(), text: 'Validar abertura no app do LinkedIn', done: false },
+      { id: uid(), text: 'Validar filtros: Hot, Vagas, Publicações, 24h', done: false },
+    ]
+  };
 
-### 2.5 Follow-up de Leads (`flavio-guedes/epq-central/follow-up-leads`)
-- criada aplicação funcional para gestão de leads
-- dashboard com KPIs, funil, agenda e timeline
-- dados iniciais realistas do lead **Ronan Pontes** enviado por Flávio
-- sem backend: roda no browser com localStorage
+  createApp({
+    setup() {
+      const weeks = ref(load().length ? load() : [defaultWeek()]);
+      const activeWeek = ref(0);
+      const activeDay = ref(null);
+      const inspection = ref(defaultInspection);
+      const checklistVisible = ref(false);
+      const inspectionVisible = ref(false);
 
----
+      function persist(){ save(weeks.value); }
 
-## 3. Estado atual por repositório
+      const currentDays = computed(() => weeks.value[activeWeek.value] || []);
 
-| Repositório | Arquivo principal | Status | Link |
-|-------------|------------------|--------|------|
-| portfolio | index.html | publicado | https://flavio-guedes.github.io/portfolio/ |
-| portfolio | apresentacao-v3.html | publicado | https://flavio-guedes.github.io/portfolio/apresentacao-v3.html |
-| portfolio | relatorios.html | publicado | https://flavio-guedes.github.io/portfolio/relatorios.html |
-| epq-projetos | relatorios.html | publicado | https://flavio-guedes.github.io/epq-projetos/relatorios.html |
-| prospects | index.html | publicado | https://flavio-guedes.github.io/prospects/ |
-| painel-oportunidades | index.html | publicado | https://flavio-guedes.github.io/painel-oportunidades/ |
-| epq-central | follow-up-leads/index.html | publicado | https://flavio-guedes.github.io/epq-central/follow-up-leads/ |
+      function selectDay(day){
+        activeDay.value = day;
+        checklistVisible.value = true;
+        document.getElementById('checklist-panel').style.display = 'block';
+        document.getElementById('checklist-title').textContent = day.label + ' · ' + day.date;
+        renderChecklist();
+      }
 
----
+      function renderChecklist(){
+        const container = document.getElementById('checklist');
+        const day = currentDays.value.find(d => d.id === activeDay.value?.id);
+        if (!day || !day.tasks.length){
+          container.innerHTML = '<div class="empty">Sem tarefas para este dia.</div>';
+          return;
+        }
+        container.innerHTML = day.tasks.map(t => `
+          <div class="check-item">
+            <input type="checkbox" ${t.done ? 'checked' : ''} data-task="${t.id}" />
+            <label>${escapeHtml(t.text)}</label>
+          </div>
+        `).join('');
 
-## 4. Próximos passos
+        container.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+          cb.addEventListener('change', () => {
+            const taskId = cb.dataset.task;
+            const day = currentDays.value.find(d => d.id === activeDay.value?.id);
+            const task = day.tasks.find(x => x.id === taskId);
+            if (task){ task.done = cb.checked; persist(); }
+          });
+        });
+      }
 
-### Curto prazo
-- corrigir mobile de `parceria.html` (layouts responsivos quebrados)
-- validar comportamento de abertura do LinkedIn em dispositivos reais
-- alinhar se os filtros de Hot devem ser mantidos ou unificados com Mix
-- definir se o follow-up de leads ficará apenas com localStorage ou terá backend
+      function addTask(){
+        const text = prompt('Nova tarefa:', '') || '';
+        if (!text.trim()) return;
+        const day = currentDays.value.find(d => d.id === activeDay.value?.id);
+        day.tasks.push({ id: uid(), text: text.trim(), done: false });
+        persist();
+        renderChecklist();
+      }
 
-### Médio prazo
-- conectar follow-up de leads a uma base real:
-  - Google Sheets
-  - Supabase
-  - Firebase
-  - API própria
-- adicionar login simples para equipe comercial
-- integrar WhatsApp/CRM futuramente
+      function clearChecked(){
+        const day = currentDays.value.find(d => d.id === activeDay.value?.id);
+        day.tasks = day.tasks.filter(t => !t.done);
+        persist();
+        renderChecklist();
+      }
 
----
+      function renderWeeks(){
+        const grid = document.getElementById('weeks-grid');
+        grid.innerHTML = currentDays.value.map(day => `
+          <div class="day-card" data-day="${day.id}">
+            <div class="name">${escapeHtml(day.label)}</div>
+            <div class="date">${formatDate(day.date)}</div>
+            <div class="status">${escapeHtml(day.priority)}</div>
+          </div>
+        `).join('');
 
-## 5. Sugestões para o pequeno cliente
+        grid.querySelectorAll('.day-card').forEach(card => {
+          card.addEventListener('click', () => {
+            const day = currentDays.value.find(d => d.id === card.dataset.day);
+            if (day) selectDay(day);
+          });
+        });
+      }
 
-Para esse pequeno cliente, o melhor caminho agora é:
+      function renderPriorities(){
+        const container = document.getElementById('priority-grid');
+        const days = currentDays.value.filter(d => d.priority === 'Alta' || d.priority === 'Média');
+        container.innerHTML = days.map(day => `
+          <div class="priority-item" data-day="${day.id}">
+            <div class="title">${escapeHtml(day.label)} — ${escapeHtml(day.priority)}</div>
+            <div class="meta">${escapeHtml(day.note || '')}</div>
+          </div>
+        `).join('');
 
-1. **Validar a dor antes de codar mais**
-   - a Clara já consegue operar o follow-up de leads no endereço publicado?
-   - o que trava no dia a dia?
+        container.querySelectorAll('.priority-item').forEach(item => {
+          item.addEventListener('click', () => {
+            const day = currentDays.value.find(d => d.id === item.dataset.day);
+            if (day) selectDay(day);
+          });
+        });
+      }
 
-2. **Manter a simplicidade**
-   - não adicionar login enquanto o time for pequeno
-   - usar o próprio HTML como ferramenta operacional
-   - depois de validado, evoluir para um app com backend
+      function renderInspection(){
+        const container = document.getElementById('inspection-list');
+        const data = inspection.value;
+        document.getElementById('inspection-title').textContent = data.title + ' · ' + formatDate(data.date);
+        container.innerHTML = data.issues.map(issue => `
+          <div class="check-item">
+            <input type="checkbox" ${issue.done ? 'checked' : ''} data-issue="${issue.id}" />
+            <label>${escapeHtml(issue.text)}</label>
+          </div>
+        `).join('');
 
-3. **Acelerar com templates**
-   - mensagens de prospecção já estão no painel
-   - apresentação v3 pode ser enviada diretamente
-   - follow-up de leads já filtra atrasados/hoje/próximos
+        container.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+          cb.addEventListener('change', () => {
+            const issue = data.issues.find(x => x.id === cb.dataset.issue);
+            if (issue){ issue.done = cb.checked; }
+          });
+        });
+      }
 
----
+      function formatDate(v){ return v || '—'; }
+      function escapeHtml(text){ const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
 
-## 6. Filosofia e estilo de trabalho
+      document.getElementById('btn-create').addEventListener('click', () => {
+        weeks.value.unshift(defaultWeek());
+        activeWeek.value = 0;
+        persist();
+        renderWeeks();
+        renderPriorities();
+      });
 
-Temos seguido uma linha **futurista, editorial e minimalista**:
+      document.getElementById('btn-inspect').addEventListener('click', () => {
+        inspectionVisible.value = true;
+        document.getElementById('inspection-panel').style.display = 'block';
+        renderInspection();
+      });
 
-- menos ruído, mais dados
-- tipografia forte, espaçamento generoso
-- cores sóbrias, sem gradientes gratuitos
-- ações objetivas, sem poluir
-- HTML puro sempre que possível
-- deploy contínuo: commit → push → Pages → validação HTTP 200
+      document.getElementById('btn-close-checklist').addEventListener('click', () => {
+        checklistVisible.value = false;
+        document.getElementById('checklist-panel').style.display = 'none';
+      });
 
-A ideia é construir ferramentas que pareçam simples por fora, mas sejam poderosas por dentro. O pequeno cliente sente isso como velocidade comercial e clareza operacional.
+      document.getElementById('btn-close-inspection').addEventListener('click', () => {
+        inspectionVisible.value = false;
+        document.getElementById('inspection-panel').style.display = 'none';
+      });
 
----
+      document.getElementById('btn-add-task').addEventListener('click', addTask);
+      document.getElementById('btn-clear-checked').addEventListener('click', clearChecked);
 
-## 7. Plano de ação da semana
+      document.getElementById('btn-add-issue').addEventListener('click', () => {
+        const text = prompt('Novo problema:', '') || '';
+        if (!text.trim()) return;
+        inspection.value.issues.push({ id: uid(), text: text.trim(), done: false });
+        renderInspection();
+      });
 
-### Todos os dias
-- abrir o painel de oportunidades e verificar **Hot** e **24h**
-- abrir o follow-up de leads e checar **Atrasados** primeiro
-- registrar follow-ups realizados na timeline dos leads
+      document.getElementById('btn-export-inspection').addEventListener('click', () => {
+        const data = inspection.value;
+        const lines = [
+          '# Inspeção — ' + data.title,
+          '',
+          'Data: ' + data.date,
+          '',
+          '## Itens',
+          ...data.issues.map(i => '- [ ] ' + i.text)
+        ];
+        const blob = new Blob([lines.join('\n')], { type: 'text/markdown' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'inspecao-' + data.date + '.md';
+        a.click();
+        URL.revokeObjectURL(url);
+      });
 
-### Segunda
-- validar mobile de `parceria.html`
-- alinhar com Flávio se mantemos Hot/Mix ou unificamos
+      renderWeeks();
+      renderPriorities();
 
-### Terça
-- ajustar queries de publicações do painel de oportunidades
-- confirmar se o deep link do LinkedIn funciona no celular da Clara
-
-### Quarta
-- planejar integração do follow-up de leads com backend
-- preparar Google Sheets ou Supabase como opção
-
-### Quinta
-- revisar mensagens de prospecção
-- atualizar exemplos de follow-up no playbook se necessário
-
-### Sexta
-- fechar relatório semanal
-- validar publicações no Pages
-- planejar semana seguinte
-
----
-
-*Relatório gerado automaticamente com base nas ações realizadas.*
+      return { };
+    }
+  }).mount('#app');
+</script>
+</body>
+</html>
