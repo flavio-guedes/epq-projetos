@@ -202,6 +202,15 @@
 
   .form textarea { min-height: 100px; resize: vertical; }
 
+  .form-wrap {
+    margin-top: 10px;
+  }
+  .form-wrap summary {
+    cursor: pointer;
+    color: #fff;
+    font-size: 13px;
+  }
+
   .footer {
     margin-top: 40px;
     padding-top: 18px;
@@ -252,21 +261,39 @@
 
     <div class="long-line"></div>
 
-    <h2>Novo relatório</h2>
-    <div class="form">
-      <input id="date" type="date" />
-      <input id="title" placeholder="Título" />
-      <input id="project" placeholder="Projeto" />
-      <textarea id="body" placeholder="Conteúdo"></textarea>
-      <input id="audio" placeholder="URL do áudio (opcional)" />
-      <input id="tasks" placeholder="Tarefas (separadas por vírgula)" />
-      <select id="kind">
-        <option value="padrao">Padrão</option>
-        <option value="vi-a-vaga">Vi a vaga</option>
-        <option value="iniciativa">Iniciativa (sem vaga aberta)</option>
-      </select>
-      <button class="btn" onclick="addReport()">Adicionar</button>
-    </div>
+    <details class="form-wrap">
+      <summary>Novo relatório</summary>
+      <div class="form">
+        <input id="date" type="date" />
+        <input id="title" placeholder="Título" />
+        <select id="project">
+          <option value="">Projeto</option>
+          <option value="epq">EPQ</option>
+          <option value="projetos">Projetos</option>
+          <option value="ibm-louvor">IBMéier</option>
+          <option value="portfolio">Portfolio</option>
+          <option value="prospects">Prospects</option>
+          <option value="pedagogico">Pedagógico</option>
+        </select>
+        <textarea id="body" placeholder="Conteúdo"></textarea>
+        <input id="audio" placeholder="URL do áudio (opcional)" />
+        <input id="tasks" placeholder="Tarefas (separadas por vírgula)" />
+        <select id="kind">
+          <option value="padrao">Padrão</option>
+          <option value="vi-a-vaga">Vi a vaga</option>
+          <option value="iniciativa">Iniciativa (sem vaga aberta)</option>
+        </select>
+        <select id="stage">
+          <option value="">Etapa</option>
+          <option value="Planejamento">Planejamento</option>
+          <option value="Execução">Execução</option>
+          <option value="Validação">Validação</option>
+          <option value="Follow-up">Follow-up</option>
+          <option value="Concluído">Concluído</option>
+        </select>
+        <button class="btn" onclick="addReport()">Adicionar</button>
+      </div>
+    </details>
 
     <div class="footer">
       <div class="copy">© Flávio Guedes</div>
@@ -293,7 +320,9 @@
       title: 'Relatório 24h — Segunda 10h',
       body: 'Uploads de HTMLs do Drive para portfolio, reorganização do portfolio.html, Central de Prospecção atualizada, CRM de vagas criado, apresentacao-v3 criada com storytelling consultivo.',
       audio: 'relatorio-24h.mp3',
-      tasks: ['publicar HTMLs', 'reorganizar portfolio', 'atualizar Central de Prospecção', 'criar CRM de vagas', 'criar apresentacao-v3']
+      tasks: ['publicar HTMLs', 'reorganizar portfolio', 'atualizar Central de Prospecção', 'criar CRM de vagas', 'criar apresentacao-v3'],
+      kind: 'padrao',
+      stage: 'Concluído'
     }
   ];
 
@@ -330,7 +359,7 @@
     container.innerHTML = Object.keys(groups).sort().map(key => {
       const items = groups[key].sort((a,b) => b.date.localeCompare(a.date)).map(r => `
         <article class="card">
-          <div class="tag">${r.date}${r.kind && r.kind !== 'padrao' ? ` · ${r.kind === 'vi-a-vaga' ? 'Vi a vaga' : 'Iniciativa'}` : ''}</div>
+          <div class="tag">${r.date}${r.kind && r.kind !== 'padrao' ? ` · ${r.kind === 'vi-a-vaga' ? 'Vi a vaga' : 'Iniciativa'}` : ''}${r.stage ? ` · ${r.stage}` : ''}</div>
           <h3>${r.title}</h3>
           <p>${r.body}</p>
           ${r.tasks && r.tasks.length ? `<ul>${r.tasks.map(t => `<li>• ${t}</li>`).join('')}</ul>` : ''}
@@ -359,20 +388,24 @@
     const audio = document.getElementById('audio').value.trim();
     const tasks = document.getElementById('tasks').value.split(',').map(t => t.trim()).filter(Boolean);
     const kind = document.getElementById('kind').value;
-    if (!date || !title || !body) {
+    const stage = document.getElementById('stage').value;
+    const project = document.getElementById('project').value.trim();
+    if (!date || !title || !body || !project) {
       alert('Preencha data, título, projeto e conteúdo.');
       return;
     }
     const reports = loadReports();
-    reports.unshift({ id: 'r' + Date.now(), date, project: project || 'outros', title, body, audio: audio || '', tasks, kind });
+    reports.unshift({ id: 'r' + Date.now(), date, project, title, body, audio: audio || '', tasks, kind, stage: stage || '' });
     saveReports(reports);
     render('all');
+    document.getElementById('date').value = '';
     document.getElementById('title').value = '';
     document.getElementById('project').value = '';
     document.getElementById('body').value = '';
     document.getElementById('audio').value = '';
     document.getElementById('tasks').value = '';
     document.getElementById('kind').value = 'padrao';
+    document.getElementById('stage').value = '';
   }
 
   function removeReport(id) {
