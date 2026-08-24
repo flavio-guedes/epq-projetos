@@ -247,16 +247,6 @@
 
     <div class="long-line"></div>
 
-    <div class="filters">
-      <button class="filter active" onclick="setFilter('all')">Todos</button>
-      <button class="filter" onclick="setFilter('epq')">EPQ</button>
-      <button class="filter" onclick="setFilter('projetos')">Projetos</button>
-      <button class="filter" onclick="setFilter('ibm-louvor')">IBMéier</button>
-      <button class="filter" onclick="setFilter('portfolio')">Portfolio</button>
-      <button class="filter" onclick="setFilter('prospects')">Prospects</button>
-      <button class="filter" onclick="setFilter('pedagogico')">Pedagógico</button>
-    </div>
-
     <div id="groups"></div>
 
     <div class="long-line"></div>
@@ -339,18 +329,12 @@
     localStorage.setItem(STORAGE_KEY, JSON.stringify(reports));
   }
 
-  function setFilter(project) {
-    document.querySelectorAll('.filter').forEach(btn => btn.classList.toggle('active', btn.textContent.toLowerCase().includes(project === 'all' ? 'todos' : project)));
-    render(project);
-  }
-
-  function render(filter) {
+  function render() {
     const reports = loadReports();
     const container = document.getElementById('groups');
-    const filtered = filter && filter !== 'all' ? reports.filter(r => r.project === filter) : reports;
 
     const groups = {};
-    filtered.forEach(r => {
+    reports.forEach(r => {
       const key = r.project || 'outros';
       if (!groups[key]) groups[key] = [];
       groups[key].push(r);
@@ -397,7 +381,7 @@
     const reports = loadReports();
     reports.unshift({ id: 'r' + Date.now(), date, project, title, body, audio: audio || '', tasks, kind, stage: stage || '' });
     saveReports(reports);
-    render('all');
+    render();
     document.getElementById('date').value = '';
     document.getElementById('title').value = '';
     document.getElementById('project').value = '';
