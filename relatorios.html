@@ -89,11 +89,34 @@
     margin: 28px 0;
   }
 
+  .tabs {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+  }
+
+  .tab {
+    padding: 8px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--panel);
+    color: var(--ink);
+    font-size: 12px;
+    cursor: pointer;
+  }
+
+  .tab.active {
+    background: linear-gradient(135deg, rgba(230,168,92,0.25), rgba(230,168,92,0.05));
+    border-color: transparent;
+    color: #fff;
+  }
+
   .filters {
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
-    margin-bottom: 18px;
+    margin-bottom: 14px;
   }
 
   .filter {
@@ -205,6 +228,7 @@
   .form-wrap {
     margin-top: 10px;
   }
+
   .form-wrap summary {
     cursor: pointer;
     color: #fff;
@@ -232,6 +256,10 @@
     text-decoration: none;
   }
 
+  .alert {
+    border-left: 4px solid #f59e0b;
+  }
+
   @media (max-width: 860px) {
     .wrap { padding: 24px; }
     .grid { grid-template-columns: 1fr; }
@@ -247,7 +275,30 @@
 
     <div class="long-line"></div>
 
-    <div id="groups"></div>
+    <div class="tabs">
+      <button class="tab active" onclick="setView('reports')">Relatórios</button>
+      <button class="tab" onclick="setView('alerts')">Alertas recentes</button>
+    </div>
+
+    <div id="view-reports">
+      <div class="filters">
+        <button class="filter active" onclick="setTimeFilter('all')">Todos</button>
+        <button class="filter" onclick="setTimeFilter('10m')">10 min</button>
+        <button class="filter" onclick="setTimeFilter('30m')">30 min</button>
+        <button class="filter" onclick="setTimeFilter('1h')">1 hora</button>
+        <button class="filter" onclick="setTimeFilter('2h')">2 horas</button>
+        <button class="filter" onclick="setTimeFilter('3h')">3 horas</button>
+        <button class="filter" onclick="setTimeFilter('5h')">5 horas</button>
+        <button class="filter" onclick="setTimeFilter('1d')">1 dia</button>
+        <button class="filter" onclick="setTimeFilter('2d')">2 dias</button>
+      </div>
+
+      <div id="groups"></div>
+    </div>
+
+    <div id="view-alerts" style="display:none;">
+      <div id="alerts"></div>
+    </div>
 
     <div class="long-line"></div>
 
@@ -305,7 +356,7 @@
   const DEFAULT_REPORTS = [
     {
       id: 'r1',
-      date: '2026-08-23',
+      date: '2026-08-24T10:00:00',
       project: 'portfolio',
       title: 'Relatório 24h — Segunda 10h',
       body: 'Uploads de HTMLs do Drive para portfolio, reorganização do portfolio.html, Central de Prospecção atualizada, CRM de vagas criado, apresentacao-v3 criada com storytelling consultivo.',
@@ -315,6 +366,18 @@
       stage: 'Concluído'
     }
   ];
+
+  function parseDateTime(s) {
+    const d = new Date(s);
+    if (isNaN(d.getTime())) return null;
+    return d;
+  }
+
+  function within(dateStr, minutes) {
+    const d = parseDateTime(dateStr);
+    if (!d) return false;
+    return (Date.now() - d.getTime()) <= minutes * 60 * 1000;
+  }
 
   function loadReports() {
     try {
@@ -329,20 +392,39 @@
     localStorage.setItem(STORAGE_KEY, JSON.stringify(reports));
   }
 
-  function render() {
+  function setView(view) {
+    document.querySelectorAll('.tab').forEach(btn => btn.classList.toggle('active', btn.textContent.toLowerCase().includes(view === 'reports' ? 'relatórios' : 'alertas')));
+    document.getElementById('view-reports').style.display = view === 'reports' ? 'block' : 'none';
+    document.getElementById('view-alerts').style.display = view === 'alerts' ? 'block' : 'none';
+    if (view === 'alerts') renderAlerts();
+  }
+
+  function setTimeFilter(range) {
+    document.querySelectorAll('.filter').forEach(btn => btn.classList.toggle('active', btn.textContent.trim() === (range === 'all' ? 'Todos' : btn.textContent.trim())));
+    render(range);
+  }
+
+  function render(timeRange) {
     const reports = loadReports();
     const container = document.getElementById('groups');
 
+    let filtered = reports;
+    if (timeRange && timeRange !== 'all') {
+      const map = { '10m': 10, '30m': 30, '1h': 60, '2h': 120, '3h': 180, '5h': 300, '1d': 1440, '2d': 2880 };
+      const minutes = map[timeRange];
+      if (minutes) filtered = reports.filter(r => within(r.date, minutes));
+    }
+
     const groups = {};
-    reports.forEach(r => {
+    filtered.forEach(r => {
       const key = r.project || 'outros';
       if (!groups[key]) groups[key] = [];
       groups[key].push(r);
     });
 
     container.innerHTML = Object.keys(groups).sort().map(key => {
-      const items = groups[key].sort((a,b) => b.date.localeCompare(a.date)).map(r => `
-        <article class="card">
+      const items = groups[key].sort((a,b) => (parseDateTime(b.date)||0) - (parseDateTime(a.date)||0)).map(r => `
+        <article class="card ${r.kind === 'vi-a-vaga' || r.kind === 'iniciativa' ? 'alert' : ''}">
           <div class="tag">${r.date}${r.kind && r.kind !== 'padrao' ? ` · ${r.kind === 'vi-a-vaga' ? 'Vi a vaga' : 'Iniciativa'}` : ''}${r.stage ? ` · ${r.stage}` : ''}</div>
           <h3>${r.title}</h3>
           <p>${r.body}</p>
@@ -364,6 +446,34 @@
     }).join('');
   }
 
+  function renderAlerts() {
+    const reports = loadReports();
+    const container = document.getElementById('alerts');
+    const alerts = reports.filter(r => r.kind === 'vi-a-vaga' || r.kind === 'iniciativa').sort((a,b) => (parseDateTime(b.date)||0) - (parseDateTime(a.date)||0));
+
+    if (!alerts.length) {
+      container.innerHTML = '<p class="subtitle">Nenhum alerta recente.</p>';
+      return;
+    }
+
+    container.innerHTML = alerts.map(r => {
+      const key = r.project || 'outros';
+      return `
+        <article class="card alert">
+          <div class="tag">${r.date} · ${r.kind === 'vi-a-vaga' ? 'Vi a vaga' : 'Iniciativa'}${r.stage ? ` · ${r.stage}` : ''}</div>
+          <h3>${r.title}</h3>
+          <p>${r.body}</p>
+          ${r.tasks && r.tasks.length ? `<ul>${r.tasks.map(t => `<li>• ${t}</li>`).join('')}</ul>` : ''}
+          <div class="actions">
+            ${r.audio ? `<a class="btn" href="${r.audio}" target="_blank">Abrir áudio</a>` : ''}
+            ${PROJECT_LINKS[key] ? `<a class="btn" href="${PROJECT_LINKS[key]}" target="_blank">Ver projeto</a>` : ''}
+            <button class="btn" onclick="removeReport('${r.id}')">Remover</button>
+          </div>
+        </article>
+      `;
+    }).join('');
+  }
+
   function addReport() {
     const date = document.getElementById('date').value;
     const title = document.getElementById('title').value.trim();
@@ -373,15 +483,16 @@
     const tasks = document.getElementById('tasks').value.split(',').map(t => t.trim()).filter(Boolean);
     const kind = document.getElementById('kind').value;
     const stage = document.getElementById('stage').value;
-    const project = document.getElementById('project').value.trim();
+
     if (!date || !title || !body || !project) {
       alert('Preencha data, título, projeto e conteúdo.');
       return;
     }
+
     const reports = loadReports();
     reports.unshift({ id: 'r' + Date.now(), date, project, title, body, audio: audio || '', tasks, kind, stage: stage || '' });
     saveReports(reports);
-    render();
+    render('all');
     document.getElementById('date').value = '';
     document.getElementById('title').value = '';
     document.getElementById('project').value = '';

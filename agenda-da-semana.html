@@ -1,0 +1,178 @@
+# Relatório Semanal — EPQ / Projetos Pessoais
+
+**Período:** Semana atual  
+**Elaborado para:** Flávio Guedes  
+**Por:** Hermes (assistente de operação)  
+**Formato:** Markdown + HTML pronto para publicar/consultar
+
+---
+
+## 1. Nossa estrutura hoje
+
+Hoje a operação funciona com dois mundos separados, mas integrados:
+
+- **EPQ = cliente**  
+  Tudo que é da EPQ vive em `flavio-guedes/epq-central`.  
+  Lá temos: playbook, fluxo comercial, relatórios, iconografia, case educação e agora o **follow-up de leads**.
+
+- **Projetos = trabalho pessoal do Flávio**  
+  Tudo que é projeto/portfólio do Flávio vive em `flavio-guedes/epq-projetos`.  
+  Lá temos: relatórios por projeto, apresentações v2/v3, áudio de relatório e assets de portfólio.
+
+- **Outros repositórios auxiliares**
+  - `painel-oportunidades`: painel de vagas/publicações
+  - `prospects`: painel de prospecção com mensagens por frente/subfrente
+  - `portfolio`: site profissional com abas Produto/Marketing/Direção Criativa
+
+**Princípio que seguimos:**
+- repositórios públicos no GitHub
+- deploy automático via Pages
+- HTML primeiro, sem backend
+- versão única por arquivo quando possível
+- commit + push + validação HTTP 200 como regra
+
+---
+
+## 2. O que foi feito na semana
+
+### 2.1 Portfolio (`flavio-guedes/portfolio`)
+- atualizada `apresentacao-v2.html` com copy de **parceiro estratégico**
+- criada `apresentacao-v3.html` com storytelling **consultivo** e benefícios de automação
+- atualizado card no `index.html` para apontar para v3
+- criada `relatorios.html` com suporte a áudio e tarefas
+- adicionada aba **Relatórios** no `index.html`
+
+### 2.2 EPQ Projetos (`flavio-guedes/epq-projetos`)
+- criada `relatorios.html` com agrupamento por cliente/projeto
+- separado EPQ de Projetos nos filtros
+- adicionado campo de **tarefas** nos relatórios
+- adicionados campos **Tipo** (Vaga / Iniciativa), **Projeto** e **Etapa**
+- removidos filtros excessivos; agora mostra tudo agrupado
+
+### 2.3 Painel de Prospecção (`flavio-guedes/prospects`)
+- adicionadas posições: Redator, Social Media, GP Marketing, GP Produto
+- inserido botão **Copiar** em cada bloco de texto
+- atualizado link do portfólio para `/parceria.html` em todas as mensagens
+
+### 2.4 Painel de Oportunidades (`flavio-guedes/painel-oportunidades`)
+- título alterado para **v1 · Boulevard de Oportunidades**
+- filtros de tempo aplicados a **todos os cargos**
+- busca alterada de publicações para **LinkedIn Jobs**
+- adicionado filtro geográfico **Brasil/Latam**
+- ajustada lógica para não ocultar resultados no filtro de tempo
+- adicionados filtros:
+  - **Vagas** e **Publicações**
+  - **Hot** com Head/Lead/Diretor/Executivo e Pleno/Sênior
+  - **Candidatura simplificada** e **menos de 10 candidaturas**
+  - padrão **24 horas**
+  - modal desktop/mobile
+  - badge **Vaga / Publicação** em cada card
+- links ajustados para abrir no app do LinkedIn quando possível
+
+### 2.5 Follow-up de Leads (`flavio-guedes/epq-central/follow-up-leads`)
+- criada aplicação funcional para gestão de leads
+- dashboard com KPIs, funil, agenda e timeline
+- dados iniciais realistas do lead **Ronan Pontes** enviado por Flávio
+- sem backend: roda no browser com localStorage
+
+---
+
+## 3. Estado atual por repositório
+
+| Repositório | Arquivo principal | Status | Link |
+|-------------|------------------|--------|------|
+| portfolio | index.html | publicado | https://flavio-guedes.github.io/portfolio/ |
+| portfolio | apresentacao-v3.html | publicado | https://flavio-guedes.github.io/portfolio/apresentacao-v3.html |
+| portfolio | relatorios.html | publicado | https://flavio-guedes.github.io/portfolio/relatorios.html |
+| epq-projetos | relatorios.html | publicado | https://flavio-guedes.github.io/epq-projetos/relatorios.html |
+| prospects | index.html | publicado | https://flavio-guedes.github.io/prospects/ |
+| painel-oportunidades | index.html | publicado | https://flavio-guedes.github.io/painel-oportunidades/ |
+| epq-central | follow-up-leads/index.html | publicado | https://flavio-guedes.github.io/epq-central/follow-up-leads/ |
+
+---
+
+## 4. Próximos passos
+
+### Curto prazo
+- corrigir mobile de `parceria.html` (layouts responsivos quebrados)
+- validar comportamento de abertura do LinkedIn em dispositivos reais
+- alinhar se os filtros de Hot devem ser mantidos ou unificados com Mix
+- definir se o follow-up de leads ficará apenas com localStorage ou terá backend
+
+### Médio prazo
+- conectar follow-up de leads a uma base real:
+  - Google Sheets
+  - Supabase
+  - Firebase
+  - API própria
+- adicionar login simples para equipe comercial
+- integrar WhatsApp/CRM futuramente
+
+---
+
+## 5. Sugestões para o pequeno cliente
+
+Para esse pequeno cliente, o melhor caminho agora é:
+
+1. **Validar a dor antes de codar mais**
+   - a Clara já consegue operar o follow-up de leads no endereço publicado?
+   - o que trava no dia a dia?
+
+2. **Manter a simplicidade**
+   - não adicionar login enquanto o time for pequeno
+   - usar o próprio HTML como ferramenta operacional
+   - depois de validado, evoluir para um app com backend
+
+3. **Acelerar com templates**
+   - mensagens de prospecção já estão no painel
+   - apresentação v3 pode ser enviada diretamente
+   - follow-up de leads já filtra atrasados/hoje/próximos
+
+---
+
+## 6. Filosofia e estilo de trabalho
+
+Temos seguido uma linha **futurista, editorial e minimalista**:
+
+- menos ruído, mais dados
+- tipografia forte, espaçamento generoso
+- cores sóbrias, sem gradientes gratuitos
+- ações objetivas, sem poluir
+- HTML puro sempre que possível
+- deploy contínuo: commit → push → Pages → validação HTTP 200
+
+A ideia é construir ferramentas que pareçam simples por fora, mas sejam poderosas por dentro. O pequeno cliente sente isso como velocidade comercial e clareza operacional.
+
+---
+
+## 7. Plano de ação da semana
+
+### Todos os dias
+- abrir o painel de oportunidades e verificar **Hot** e **24h**
+- abrir o follow-up de leads e checar **Atrasados** primeiro
+- registrar follow-ups realizados na timeline dos leads
+
+### Segunda
+- validar mobile de `parceria.html`
+- alinhar com Flávio se mantemos Hot/Mix ou unificamos
+
+### Terça
+- ajustar queries de publicações do painel de oportunidades
+- confirmar se o deep link do LinkedIn funciona no celular da Clara
+
+### Quarta
+- planejar integração do follow-up de leads com backend
+- preparar Google Sheets ou Supabase como opção
+
+### Quinta
+- revisar mensagens de prospecção
+- atualizar exemplos de follow-up no playbook se necessário
+
+### Sexta
+- fechar relatório semanal
+- validar publicações no Pages
+- planejar semana seguinte
+
+---
+
+*Relatório gerado automaticamente com base nas ações realizadas.*
