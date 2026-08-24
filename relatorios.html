@@ -260,6 +260,11 @@
       <textarea id="body" placeholder="Conteúdo"></textarea>
       <input id="audio" placeholder="URL do áudio (opcional)" />
       <input id="tasks" placeholder="Tarefas (separadas por vírgula)" />
+      <select id="kind">
+        <option value="padrao">Padrão</option>
+        <option value="vi-a-vaga">Vi a vaga</option>
+        <option value="iniciativa">Iniciativa (sem vaga aberta)</option>
+      </select>
       <button class="btn" onclick="addReport()">Adicionar</button>
     </div>
 
@@ -325,7 +330,7 @@
     container.innerHTML = Object.keys(groups).sort().map(key => {
       const items = groups[key].sort((a,b) => b.date.localeCompare(a.date)).map(r => `
         <article class="card">
-          <div class="tag">${r.date}</div>
+          <div class="tag">${r.date}${r.kind && r.kind !== 'padrao' ? ` · ${r.kind === 'vi-a-vaga' ? 'Vi a vaga' : 'Iniciativa'}` : ''}</div>
           <h3>${r.title}</h3>
           <p>${r.body}</p>
           ${r.tasks && r.tasks.length ? `<ul>${r.tasks.map(t => `<li>• ${t}</li>`).join('')}</ul>` : ''}
@@ -353,12 +358,13 @@
     const body = document.getElementById('body').value.trim();
     const audio = document.getElementById('audio').value.trim();
     const tasks = document.getElementById('tasks').value.split(',').map(t => t.trim()).filter(Boolean);
+    const kind = document.getElementById('kind').value;
     if (!date || !title || !body) {
       alert('Preencha data, título, projeto e conteúdo.');
       return;
     }
     const reports = loadReports();
-    reports.unshift({ id: 'r' + Date.now(), date, project: project || 'outros', title, body, audio: audio || '', tasks });
+    reports.unshift({ id: 'r' + Date.now(), date, project: project || 'outros', title, body, audio: audio || '', tasks, kind });
     saveReports(reports);
     render('all');
     document.getElementById('title').value = '';
@@ -366,6 +372,7 @@
     document.getElementById('body').value = '';
     document.getElementById('audio').value = '';
     document.getElementById('tasks').value = '';
+    document.getElementById('kind').value = 'padrao';
   }
 
   function removeReport(id) {
