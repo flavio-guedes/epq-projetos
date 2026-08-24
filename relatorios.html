@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Relatórios — Projetos</title>
+<style>
+  :root {
+    --bg: #050505;
+    --ink: #ffffff;
+    --muted: #b8b8b8;
+    --gold: #E6A85C;
+    --gold-dim: #c08b42;
+    --panel: rgba(255,255,255,0.04);
+    --line: rgba(255,255,255,0.08);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    height: 100%;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    top: -220px;
+    right: -220px;
+    width: 720px;
+    height: 720px;
+    background: radial-gradient(circle, rgba(255,255,255,0.12) 0%, rgba(0,0,0,0) 70%);
+    transform: rotate(35deg);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrap {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 48px;
+  }
+
+  .top-nav {
+    font-size: 11px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.85);
+    margin-bottom: 18px;
+  }
+
+  .short-line {
+    width: 64px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--gold), var(--gold-dim));
+    border-radius: 999px;
+    margin-bottom: 22px;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', 'Times New Roman', serif;
+    font-weight: 400;
+    line-height: 1.05;
+    letter-spacing: -0.5px;
+    font-size: clamp(42px, 5.4vw, 76px);
+    margin-bottom: 18px;
+  }
+
+  .white { color: #ffffff; }
+  .gold { color: var(--gold); }
+
+  .subtitle {
+    font-size: 16px;
+    color: var(--muted);
+    line-height: 1.5;
+    max-width: 88%;
+    margin-bottom: 28px;
+  }
+
+  .long-line {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+    margin: 28px 0;
+  }
+
+  .filters {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+  }
+
+  .filter {
+    padding: 8px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--panel);
+    color: var(--ink);
+    font-size: 12px;
+    cursor: pointer;
+  }
+
+  .filter.active {
+    background: linear-gradient(135deg, rgba(230,168,92,0.25), rgba(230,168,92,0.05));
+    border-color: transparent;
+    color: #fff;
+  }
+
+  .project-group {
+    margin-bottom: 24px;
+  }
+
+  .project-title {
+    font-size: 13px;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  .card {
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 16px;
+    background: var(--panel);
+    backdrop-filter: blur(10px);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+
+  .card .tag {
+    font-size: 11px;
+    color: var(--gold);
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    margin-bottom: 8px;
+  }
+
+  .card p {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.45;
+    margin-bottom: 10px;
+  }
+
+  .actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 10px;
+    border-radius: 12px;
+    border: 1px solid var(--line);
+    background: linear-gradient(135deg, rgba(230,168,92,0.25), rgba(230,168,92,0.05));
+    color: #fff;
+    text-decoration: none;
+    font-size: 12px;
+  }
+
+  .form {
+    display: grid;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  .form input, .form textarea, .form select {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: 1px solid var(--line);
+    background: rgba(255,255,255,0.04);
+    color: #fff;
+    font-size: 13px;
+  }
+
+  .form textarea { min-height: 100px; resize: vertical; }
+
+  .footer {
+    margin-top: 40px;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .footer .copy {
+    font-size: 12px;
+    color: rgba(255,255,255,0.7);
+  }
+
+  .footer a {
+    color: var(--gold);
+    text-decoration: none;
+  }
+
+  @media (max-width: 860px) {
+    .wrap { padding: 24px; }
+    .grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top-nav">Relatórios</div>
+    <div class="short-line"></div>
+    <h1><span class="white">Relatórios</span> <span class="gold">por projeto</span></h1>
+    <p class="subtitle">Acompanhamento periódico resumido, com áudio quando disponível.</p>
+
+    <div class="long-line"></div>
+
+    <div class="filters">
+      <button class="filter active" onclick="setFilter('all')">Todos</button>
+      <button class="filter" onclick="setFilter('portfolio')">Portfolio</button>
+      <button class="filter" onclick="setFilter('prospects')">Prospects</button>
+      <button class="filter" onclick="setFilter('ibm-louvor')">IBMéier</button>
+      <button class="filter" onclick="setFilter('epq-central')">EPQ Central</button>
+      <button class="filter" onclick="setFilter('pedagogico')">Pedagógico</button>
+    </div>
+
+    <div id="groups"></div>
+
+    <div class="long-line"></div>
+
+    <h2>Novo relatório</h2>
+    <div class="form">
+      <input id="date" type="date" />
+      <input id="title" placeholder="Título" />
+      <input id="project" placeholder="Projeto" />
+      <textarea id="body" placeholder="Conteúdo"></textarea>
+      <input id="audio" placeholder="URL do áudio (opcional)" />
+      <button class="btn" onclick="addReport()">Adicionar</button>
+    </div>
+
+    <div class="footer">
+      <div class="copy">© Flávio Guedes</div>
+      <a class="btn" href="/Users/mac/repo-portfolio/relatorio-24h.mp3" target="_blank">Baixar último áudio</a>
+    </div>
+  </div>
+
+<script>
+  const STORAGE_KEY = 'project_reports_v1';
+  const PROJECT_LINKS = {
+    'portfolio': 'https://flavio-guedes.github.io/portfolio/',
+    'prospects': 'https://flavio-guedes.github.io/prospects/',
+    'ibm-louvor': 'https://flavio-guedes.github.io/ibm-louvor/',
+    'epq-central': 'https://flavio-guedes.github.io/epq-central/',
+    'pedagogico': 'https://flavio-guedes.github.io/pedagogico/'
+  };
+
+  const DEFAULT_REPORTS = [
+    {
+      id: 'r1',
+      date: '2026-08-23',
+      project: 'portfolio',
+      title: 'Relatório 24h — Segunda 10h',
+      body: 'Uploads de HTMLs do Drive para portfolio, reorganização do portfolio.html, Central de Prospecção atualizada, CRM de vagas criado, apresentacao-v3 criada com storytelling consultivo.',
+      audio: 'relatorio-24h.mp3'
+    }
+  ];
+
+  function loadReports() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : DEFAULT_REPORTS;
+    } catch {
+      return DEFAULT_REPORTS;
+    }
+  }
+
+  function saveReports(reports) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(reports));
+  }
+
+  function setFilter(project) {
+    document.querySelectorAll('.filter').forEach(btn => btn.classList.toggle('active', btn.textContent.toLowerCase().includes(project === 'all' ? 'todos' : project)));
+    render(project);
+  }
+
+  function render(filter) {
+    const reports = loadReports();
+    const container = document.getElementById('groups');
+    const filtered = filter && filter !== 'all' ? reports.filter(r => r.project === filter) : reports;
+
+    const groups = {};
+    filtered.forEach(r => {
+      const key = r.project || 'outros';
+      if (!groups[key]) groups[key] = [];
+      groups[key].push(r);
+    });
+
+    container.innerHTML = Object.keys(groups).sort().map(key => {
+      const items = groups[key].sort((a,b) => b.date.localeCompare(a.date)).map(r => `
+        <article class="card">
+          <div class="tag">${r.date}</div>
+          <h3>${r.title}</h3>
+          <p>${r.body}</p>
+          <div class="actions">
+            ${r.audio ? `<a class="btn" href="${r.audio}" target="_blank">Abrir áudio</a>` : ''}
+            ${PROJECT_LINKS[key] ? `<a class="btn" href="${PROJECT_LINKS[key]}" target="_blank">Ver projeto</a>` : ''}
+            <button class="btn" onclick="removeReport('${r.id}')">Remover</button>
+          </div>
+        </article>
+      `).join('');
+
+      return `
+        <div class="project-group">
+          <div class="project-title">${key.toUpperCase()}</div>
+          <div class="grid">${items}</div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function addReport() {
+    const date = document.getElementById('date').value;
+    const title = document.getElementById('title').value.trim();
+    const project = document.getElementById('project').value.trim();
+    const body = document.getElementById('body').value.trim();
+    const audio = document.getElementById('audio').value.trim();
+    if (!date || !title || !body) {
+      alert('Preencha data, título, projeto e conteúdo.');
+      return;
+    }
+    const reports = loadReports();
+    reports.unshift({ id: 'r' + Date.now(), date, project: project || 'outros', title, body, audio: audio || '' });
+    saveReports(reports);
+    render('all');
+    document.getElementById('title').value = '';
+    document.getElementById('project').value = '';
+    document.getElementById('body').value = '';
+    document.getElementById('audio').value = '';
+  }
+
+  function removeReport(id) {
+    if (!confirm('Remover este relatório?')) return;
+    const reports = loadReports().filter(r => r.id !== id);
+    saveReports(reports);
+    render('all');
+  }
+
+  render('all');
+</script>
+</body>
+</html>
