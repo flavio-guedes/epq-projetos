@@ -259,6 +259,7 @@
       <input id="project" placeholder="Projeto" />
       <textarea id="body" placeholder="Conteúdo"></textarea>
       <input id="audio" placeholder="URL do áudio (opcional)" />
+      <input id="tasks" placeholder="Tarefas (separadas por vírgula)" />
       <button class="btn" onclick="addReport()">Adicionar</button>
     </div>
 
@@ -286,7 +287,8 @@
       project: 'portfolio',
       title: 'Relatório 24h — Segunda 10h',
       body: 'Uploads de HTMLs do Drive para portfolio, reorganização do portfolio.html, Central de Prospecção atualizada, CRM de vagas criado, apresentacao-v3 criada com storytelling consultivo.',
-      audio: 'relatorio-24h.mp3'
+      audio: 'relatorio-24h.mp3',
+      tasks: ['publicar HTMLs', 'reorganizar portfolio', 'atualizar Central de Prospecção', 'criar CRM de vagas', 'criar apresentacao-v3']
     }
   ];
 
@@ -326,6 +328,7 @@
           <div class="tag">${r.date}</div>
           <h3>${r.title}</h3>
           <p>${r.body}</p>
+          ${r.tasks && r.tasks.length ? `<ul>${r.tasks.map(t => `<li>• ${t}</li>`).join('')}</ul>` : ''}
           <div class="actions">
             ${r.audio ? `<a class="btn" href="${r.audio}" target="_blank">Abrir áudio</a>` : ''}
             ${PROJECT_LINKS[key] ? `<a class="btn" href="${PROJECT_LINKS[key]}" target="_blank">Ver projeto</a>` : ''}
@@ -349,18 +352,20 @@
     const project = document.getElementById('project').value.trim();
     const body = document.getElementById('body').value.trim();
     const audio = document.getElementById('audio').value.trim();
+    const tasks = document.getElementById('tasks').value.split(',').map(t => t.trim()).filter(Boolean);
     if (!date || !title || !body) {
       alert('Preencha data, título, projeto e conteúdo.');
       return;
     }
     const reports = loadReports();
-    reports.unshift({ id: 'r' + Date.now(), date, project: project || 'outros', title, body, audio: audio || '' });
+    reports.unshift({ id: 'r' + Date.now(), date, project: project || 'outros', title, body, audio: audio || '', tasks });
     saveReports(reports);
     render('all');
     document.getElementById('title').value = '';
     document.getElementById('project').value = '';
     document.getElementById('body').value = '';
     document.getElementById('audio').value = '';
+    document.getElementById('tasks').value = '';
   }
 
   function removeReport(id) {
