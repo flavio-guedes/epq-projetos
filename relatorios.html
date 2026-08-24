@@ -233,17 +233,18 @@
   <div class="wrap">
     <div class="top-nav">Relatórios</div>
     <div class="short-line"></div>
-    <h1><span class="white">Relatórios</span> <span class="gold">por projeto</span></h1>
+    <h1><span class="white">Relatórios</span> <span class="gold">por cliente/projeto</span></h1>
     <p class="subtitle">Acompanhamento periódico resumido, com áudio quando disponível.</p>
 
     <div class="long-line"></div>
 
     <div class="filters">
       <button class="filter active" onclick="setFilter('all')">Todos</button>
+      <button class="filter" onclick="setFilter('epq')">EPQ</button>
+      <button class="filter" onclick="setFilter('projetos')">Projetos</button>
+      <button class="filter" onclick="setFilter('ibm-louvor')">IBMéier</button>
       <button class="filter" onclick="setFilter('portfolio')">Portfolio</button>
       <button class="filter" onclick="setFilter('prospects')">Prospects</button>
-      <button class="filter" onclick="setFilter('ibm-louvor')">IBMéier</button>
-      <button class="filter" onclick="setFilter('epq-central')">EPQ Central</button>
       <button class="filter" onclick="setFilter('pedagogico')">Pedagógico</button>
     </div>
 
@@ -270,10 +271,11 @@
 <script>
   const STORAGE_KEY = 'project_reports_v1';
   const PROJECT_LINKS = {
+    'epq': 'https://flavio-guedes.github.io/epq-central/',
+    'projetos': 'https://flavio-guedes.github.io/epq-projetos/',
+    'ibm-louvor': 'https://flavio-guedes.github.io/ibm-louvor/',
     'portfolio': 'https://flavio-guedes.github.io/portfolio/',
     'prospects': 'https://flavio-guedes.github.io/prospects/',
-    'ibm-louvor': 'https://flavio-guedes.github.io/ibm-louvor/',
-    'epq-central': 'https://flavio-guedes.github.io/epq-central/',
     'pedagogico': 'https://flavio-guedes.github.io/pedagogico/'
   };
 
