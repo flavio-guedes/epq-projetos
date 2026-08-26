@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Parceria em Comunicação, Marketing e Produto com IA — Flávio Guedes</title>
+<style>
+  :root{
+    --bg:#F7F5F0; --bg-warm:#F0EDE5; --champagne:#E8E0D0;
+    --gold:#C8A96E; --gold-light:#D4B882; --gold-very-light:#E8D9B8;
+    --graphite:#2C2C2C; --graphite-mid:#3D3D3D; --taupe:#6B5E50; --warm-gray:#8A8078;
+    --line:rgba(180,160,120,0.35); --line-dark:rgba(44,44,44,0.1);
+    --white:#FFFFFF;
+    --radius:14px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);color:var(--graphite);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.6;-webkit-font-smoothing:antialiased;
+  }
+  .container{max-width:880px;margin:0 auto;padding:0 32px;}
+
+  /* Hero compacto */
+  .hero{
+    position:relative;display:flex;align-items:center;justify-content:center;
+    min-height:60vh;overflow:hidden;text-align:center;
+    background:url('assets/hero-banner.png') center/cover no-repeat;
+  }
+  .hero-overlay{
+    position:absolute;inset:0;
+    background:linear-gradient(180deg, rgba(247,245,240,0.6) 0%, var(--bg) 100%);
+    z-index:1;
+  }
+  .hero-content{position:relative;z-index:2;max-width:720px;padding:80px 24px 60px;}
+  .hero-badge{
+    display:inline-flex;align-items:center;gap:10px;
+    color:var(--gold);font-size:11px;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;
+    margin-bottom:24px;
+  }
+  .hero-badge::before, .hero-badge::after{
+    content:"";width:32px;height:1px;background:linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  .hero h1{
+    font-size:clamp(30px,5vw,52px);font-weight:600;line-height:1.1;letter-spacing:-0.02em;
+    margin-bottom:16px;color:var(--graphite);
+  }
+  .hero h1 em{
+    font-style:normal;
+    background:linear-gradient(90deg, var(--gold), var(--gold-light));
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  }
+  .hero-desc{
+    font-size:16px;color:var(--taupe);line-height:1.6;max-width:520px;margin:0 auto 28px;font-weight:400;
+  }
+  .divider{
+    width:48px;height:2px;margin:0 auto 28px;
+    background:linear-gradient(90deg, var(--gold), var(--gold-light));
+  }
+
+  /* Formulário compacto */
+  .capture-card{
+    background:rgba(255,255,255,0.75);backdrop-filter:blur(16px);
+    border:1px solid var(--line);border-radius:var(--radius);
+    padding:32px 28px;max-width:460px;margin:0 auto;
+  }
+  .capture-card h3{
+    font-size:17px;font-weight:600;margin-bottom:4px;text-align:center;color:var(--graphite);
+  }
+  .capture-card .sub{
+    font-size:12px;color:var(--warm-gray);text-align:center;margin-bottom:20px;
+  }
+  .form-group{margin-bottom:12px;text-align:left;}
+  .form-group label{
+    display:block;font-size:10px;font-weight:600;letter-spacing:0.1em;
+    text-transform:uppercase;color:var(--taupe);margin-bottom:4px;
+  }
+  .form-group input{
+    width:100%;background:var(--bg);border:1px solid var(--line-dark);color:var(--graphite);
+    padding:12px 14px;font-size:13px;border-radius:10px;transition:border-color 0.2s;
+  }
+  .form-group input:focus{outline:none;border-color:var(--gold);}
+  .form-group input::placeholder{color:var(--warm-gray);}
+  .form-submit{
+    width:100%;background:var(--graphite);color:var(--white);border:none;
+    padding:14px;font-size:14px;font-weight:600;border-radius:10px;cursor:pointer;
+    margin-top:8px;transition:all 0.2s;letter-spacing:0.02em;
+  }
+  .form-submit:hover{background:var(--graphite-mid);}
+  .form-note{
+    font-size:11px;color:var(--warm-gray);text-align:center;margin-top:10px;
+  }
+
+  /* Conteúdo compacto */
+  .content-section{margin:48px auto;max-width:720px;}
+  .section-label{
+    font-size:10px;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;
+    color:var(--gold);margin-bottom:12px;
+  }
+  .section-title{
+    font-size:clamp(22px,3vw,30px);font-weight:600;line-height:1.2;letter-spacing:-0.01em;
+    margin-bottom:14px;color:var(--graphite);
+  }
+  .text{
+    font-size:14px;color:var(--taupe);line-height:1.6;margin-bottom:14px;
+  }
+  .gold-line{
+    width:100%;height:1px;margin:24px 0;
+    background:linear-gradient(90deg, transparent, var(--gold), var(--gold-light), transparent);
+  }
+
+  /* Lista de valores compacta */
+  .values{
+    display:flex;flex-direction:column;gap:14px;margin-top:20px;
+  }
+  .value-item{
+    display:flex;gap:14px;align-items:flex-start;
+    padding-bottom:14px;border-bottom:1px solid var(--line);
+  }
+  .value-item:last-child{border-bottom:none;}
+  .value-num{
+    font-size:13px;font-weight:700;color:var(--gold);min-width:24px;padding-top:2px;
+  }
+  .value-content{flex:1;}
+  .value-content h4{
+    font-size:15px;font-weight:600;margin-bottom:2px;color:var(--graphite);
+  }
+  .value-content p{
+    font-size:13px;color:var(--taupe);line-height:1.5;
+  }
+
+  /* Prova social compacta */
+  .social-proof{
+    margin:40px auto;padding:28px 24px;text-align:center;
+    border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  }
+  .social-proof .nums{
+    display:flex;justify-content:center;gap:40px;flex-wrap:wrap;margin-top:18px;
+  }
+  .social-proof .num{text-align:center;}
+  .social-proof .num-val{
+    font-size:28px;font-weight:600;color:var(--graphite);
+    background:linear-gradient(180deg, var(--graphite), var(--graphite-mid));
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  }
+  .social-proof .num-lbl{
+    font-size:10px;color:var(--warm-gray);text-transform:uppercase;letter-spacing:0.08em;margin-top:4px;
+  }
+
+  /* Sessão premium escura compacta */
+  .premium-section{
+    margin:48px auto;padding:48px 28px;text-align:center;max-width:720px;
+    background:linear-gradient(180deg, rgba(44,44,44,0.92), rgba(20,20,20,0.95));
+    border:1px solid rgba(200,169,110,0.35);border-radius:var(--radius);
+    position:relative;overflow:hidden;
+  }
+  .premium-section::before{
+    content:"";position:absolute;top:-40px;left:50%;transform:translateX(-50%);
+    width:260px;height:140px;
+    background:radial-gradient(circle, rgba(200,169,110,0.12), transparent);
+    pointer-events:none;
+  }
+  .premium-section .section-label{
+    color:var(--gold-light);position:relative;z-index:1;
+  }
+  .premium-section .section-title{
+    color:var(--white);position:relative;z-index:1;font-size:clamp(20px,2.8vw,28px);
+  }
+  .premium-section .text{
+    color:rgba(243,246,251,0.82);position:relative;z-index:1;font-size:13px;
+  }
+  .premium-cta{
+    position:relative;z-index:1;display:inline-flex;align-items:center;gap:8px;
+    padding:14px 24px;border-radius:10px;background:var(--gold);color:var(--graphite);
+    font-weight:700;font-size:13px;text-decoration:none;border:1px solid transparent;margin-top:20px;
+    transition:all 0.2s;
+  }
+  .premium-cta:hover{background:var(--gold-light);}
+
+  /* FAQ compacto */
+  .faq{
+    margin:40px auto;display:flex;flex-direction:column;gap:1px;
+    background:var(--line);border:1px solid var(--line);
+  }
+  .faq-item{
+    background:var(--white);overflow:hidden;
+  }
+  .faq-question{
+    padding:14px 18px;font-size:13px;font-weight:600;cursor:pointer;
+    display:flex;justify-content:space-between;align-items:center;color:var(--graphite);
+    transition:background 0.2s;
+  }
+  .faq-question:hover{background:rgba(200,169,110,0.06);}
+  .faq-question::after{
+    content:"";width:10px;height:10px;
+    background:linear-gradient(135deg, var(--gold), var(--gold-light));
+    mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='3'%3E%3Cpath d='M12 5v14M5 12h14'/%3E%3C/svg%3E") center/contain no-repeat;
+    -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='3'%3E%3Cpath d='M12 5v14M5 12h14'/%3E%3C/svg%3E") center/contain no-repeat;
+    transition:transform 0.3s;
+  }
+  .faq-item.open .faq-question::after{transform:rotate(45deg);}
+  .faq-answer{
+    max-height:0;overflow:hidden;transition:max-height 0.3s ease;padding:0 18px;
+  }
+  .faq-item.open .faq-answer{max-height:180px;padding:0 18px 14px;}
+  .faq-answer p{font-size:13px;color:var(--taupe);line-height:1.5;}
+
+  /* CTA Final compacto */
+  .cta-final{
+    margin:40px auto 24px;padding:36px 28px;text-align:center;max-width:720px;
+    background:var(--white);border:1px solid var(--line);border-radius:var(--radius);
+    position:relative;overflow:hidden;
+  }
+  .cta-final::before{
+    content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);
+    width:160px;height:2px;
+    background:linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  .cta-final h2{font-size:20px;font-weight:600;margin-bottom:10px;color:var(--graphite);}
+  .cta-final p{font-size:13px;color:var(--taupe);margin-bottom:20px;line-height:1.5;}
+  .cta-final .btn{
+    display:inline-flex;align-items:center;gap:8px;padding:14px 24px;border-radius:10px;
+    background:var(--graphite);color:var(--white);font-weight:600;font-size:13px;
+    text-decoration:none;border:1px solid transparent;transition:all 0.2s;
+  }
+  .cta-final .btn:hover{background:var(--graphite-mid);}
+  .cta-final .guarantee{
+    font-size:11px;color:var(--warm-gray);margin-top:12px;
+  }
+
+  /* Rodapé */
+  footer{
+    margin-top:20px;padding:24px;text-align:center;
+    border-top:1px solid var(--line);color:var(--warm-gray);font-size:11px;
+  }
+
+  @media(max-width:768px){
+    .hero{min-height:auto;padding-top:80px;padding-bottom:40px;}
+    .capture-card{padding:28px 20px;}
+    .content-section{margin:36px 0;}
+    .social-proof{margin:32px 0;}
+    .social-proof .nums{gap:28px;}
+    .faq{margin:32px 0;}
+    .cta-final{margin:32px 0;padding:32px 20px;}
+    .premium-section{margin:40px 0;padding:40px 20px;}
+  }
+</style>
+</head>
+<body>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-badge">Parceria Estratégica</div>
+      <h1>Comunicação, Marketing e Produto com <em>IA aplicada</em></h1>
+      <p class="hero-desc">
+        Um parceiro para conectar estratégia, criação e tecnologia — e transformar IA em resultado real.
+      </p>
+      <div class="divider"></div>
+
+      <!-- Formulário -->
+      <div class="capture-card">
+        <h3>Peça sua proposta</h3>
+        <p class="sub">Respondo em até 24h com um escopo fechado</p>
+        <form id="leadForm">
+          <div class="form-group">
+            <label for="nome">Nome</label>
+            <input type="text" id="nome" name="nome" placeholder="Seu nome" required>
+          </div>
+          <div class="form-group">
+            <label for="email">E-mail</label>
+            <input type="email" id="email" name="email" placeholder="seu@email.com" required>
+          </div>
+          <div class="form-group">
+            <label for="whatsapp">WhatsApp</label>
+            <input type="tel" id="whatsapp" name="whatsapp" placeholder="(11) 99999-9999" required>
+          </div>
+          <button type="submit" class="form-submit">Enviar e abrir conversa →</button>
+          <p class="form-note">Sem compromisso • Resposta em até 24h • Orçamento detalhado</p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Proposta compacta -->
+  <section class="content-section">
+    <div class="container">
+      <div class="section-label">A Proposta</div>
+      <h2 class="section-title">Parceria em comunicação, marketing e produto</h2>
+      <p class="text">
+        Atuo como braço direito de times que precisam de ritmo, clareza e execução — sem ruído entre estratégia, criação e operação.
+      </p>
+      <p class="text">
+        Com IA aplicada, reduzo trabalho repetitivo, organizo conteúdo e melhoro a experiência do cliente em canais, produto e narrativa.
+      </p>
+      <div class="gold-line"></div>
+
+      <div class="values">
+        <div class="value-item">
+          <div class="value-num">01</div>
+          <div class="value-content">
+            <h4>Comunicação</h4>
+            <p>Narrativa consistente, alinhamento entre áreas e materiais que conectam com sua audiência.</p>
+          </div>
+        </div>
+        <div class="value-item">
+          <div class="value-num">02</div>
+          <div class="value-content">
+            <h4>Marketing</h4>
+            <p>Estratégia, criativos, mídia e conteúdo ligados a dados e resultados — não só aparência.</p>
+          </div>
+        </div>
+        <div class="value-item">
+          <div class="value-num">03</div>
+          <div class="value-content">
+            <h4>Produto</h4>
+            <p>Experiência, priorização e comunicação sem ruído entre time, negócio e usuário.</p>
+          </div>
+        </div>
+        <div class="value-item">
+          <div class="value-num">04</div>
+          <div class="value-content">
+            <h4>IA aplicada</h4>
+            <p>Agentes e fluxos que reduzem trabalho repetitivo, organizam conteúdo e escalam operação.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Prova social compacta -->
+  <section class="social-proof">
+    <div class="container">
+      <div class="section-label">Resultados</div>
+      <div class="nums">
+        <div class="num">
+          <div class="num-val">10+</div>
+          <div class="num-lbl">Anos de experiência</div>
+        </div>
+        <div class="num">
+          <div class="num-val">150+</div>
+          <div class="num-lbl">Projetos entregues</div>
+        </div>
+        <div class="num">
+          <div class="num-val">40%</div>
+          <div class="num-lbl">Aumento médio em conversão</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Diferencial premium compacto -->
+  <section class="content-section">
+    <div class="container">
+      <div class="premium-section">
+        <div class="section-label">Diferencial</div>
+        <h2 class="section-title">IA Agêntica aplicada a marketing, comunicação e operação</h2>
+        <p class="text">
+          Não é só tendência. São agentes e fluxos que reduzem trabalho repetitivo, organizam conteúdo e melhoram a experiência do cliente — com execução próxima.
+        </p>
+        <a href="https://wa.me/5521999719474" class="premium-cta">Falar no WhatsApp</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ compacto -->
+  <section class="content-section">
+    <div class="container">
+      <div class="section-label">Dúvidas</div>
+      <h2 class="section-title">Perguntas frequentes</h2>
+      <div class="faq">
+        <div class="faq-item">
+          <div class="faq-question">Como funciona a parceria?</div>
+          <div class="faq-answer"><p>Escopo fechado por período, com reuniões de alinhamento e entregas contínuas. Você tem previsibilidade.</p></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">Qual o investimento?</div>
+          <div class="faq-answer"><p>Pontuais a partir de R$ 2.500; mensais a partir de R$ 4.500/mês; retainer a partir de R$ 7.800/mês.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Final compacto -->
+  <section>
+    <div class="container">
+      <div class="cta-final">
+        <h2>Pronto para conversar?</h2>
+        <p>Envie seus dados e eu retorno com uma proposta personalizada em até 24h.</p>
+        <a href="https://wa.me/5521999719474" class="btn">Falar no WhatsApp</a>
+        <div class="guarantee">Sem compromisso • Resposta em até 24h</div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>Flávio Guedes — Comunicação, Marketing e Produto com IA • 2026</p>
+    </div>
+  </footer>
+
+  <script>
+    // FAQ accordion
+    document.querySelectorAll('.faq-question').forEach(q => {
+      q.addEventListener('click', () => {
+        const item = q.parentElement;
+        const isOpen = item.classList.contains('open');
+        document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+        if (!isOpen) item.classList.add('open');
+      });
+    });
+
+    // Captura lead e redireciona para WhatsApp
+    document.getElementById('leadForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const nome = document.getElementById('nome').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const whatsapp = document.getElementById('whatsapp').value.trim();
+
+      if (!nome || !email || !whatsapp) {
+        alert('Preencha todos os campos');
+        return;
+      }
+
+      const texto = encodeURIComponent(
+        `Olá, sou ${nome}. E-mail: ${email}. WhatsApp: ${whatsapp}. Quero uma proposta de parceria em comunicação, marketing e produto com IA.`
+      );
+      const wa = `https://wa.me/5521999719474?text=${texto}`;
+
+      const btn = this.querySelector('.form-submit');
+      btn.textContent = 'Abrindo WhatsApp...';
+      btn.disabled = true;
+
+      setTimeout(() => {
+        window.open(wa, '_blank');
+        btn.textContent = '✓ Mensagem enviada!';
+        btn.style.background = 'var(--gold)';
+        btn.style.color = 'var(--white)';
+      }, 600);
+    });
+
+    // Máscara simples para WhatsApp
+    document.getElementById('whatsapp').addEventListener('input', function(e) {
+      let v = this.value.replace(/\D/g, '');
+      if (v.length > 11) v = v.slice(0, 11);
+      if (v.length > 7) {
+        v = `(${v.slice(0,2)}) ${v.slice(2,7)}-${v.slice(7)}`;
+      } else if (v.length > 2) {
+        v = `(${v.slice(0,2)}) ${v.slice(2)}`;
+      }
+      this.value = v;
+    });
+  </script>
+</body>
+</html>
